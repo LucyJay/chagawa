@@ -1,0 +1,24 @@
+package com.chagawa.main;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Init {
+	public static void init() {
+		// 컨트롤러, DAO, 서비스를 담을 맵 생성
+		Map<String, Object> controllerMap = new HashMap<>();
+		Map<String, Object> daoMap = new HashMap<>();
+		Map<String, Object> serviceMap = new HashMap<>();
+
+		// 컨트롤러 등록
+
+		// DAO 등록
+
+		// 서비스 등록
+
+		// 각 서비스에 DAO 연결
+
+		// 각 컨트롤러에 서비스 연결
+
+	};
+}

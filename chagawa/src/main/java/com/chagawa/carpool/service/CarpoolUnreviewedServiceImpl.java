@@ -1,0 +1,19 @@
+package com.chagawa.carpool.service;
+
+import com.chagawa.carpool.dao.CarpoolDAO;
+import com.chagawa.main.ServiceInterface;
+
+public class CarpoolUnreviewedServiceImpl implements ServiceInterface {
+
+	private CarpoolDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (CarpoolDAO) obj;
+	}
+
+	@Override
+	public Object service(Object obj) throws Exception {
+		return dao.unreviewedCpNo((String) obj);
+	}
+}

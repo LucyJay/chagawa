@@ -1,0 +1,26 @@
+package com.chagawa.epilogue.dao;
+
+import java.util.List;
+
+import com.chagawa.epilogue.vo.EpilogueVO;
+import com.webjjang.util.PageObject;
+
+public interface EpilogueDAO {
+
+	public List<EpilogueVO> list(PageObject pageObject) throws Exception;
+	
+	public long getTotalRow(PageObject pageObject) throws Exception;
+	
+	public EpilogueVO view(long no) throws Exception;
+	
+	public int increase(long no) throws Exception;
+
+	public int write(EpilogueVO vo) throws Exception;
+
+	public int update(EpilogueVO vo) throws Exception;
+
+	public int delete(EpilogueVO vo) throws Exception;
+	
+
+} // end of EpilogueDAO interface
+ 

@@ -1,0 +1,61 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	alert("#wrong".val());
+	if("#wrong".val() == 1) {
+		alert("아이디나 비밀번호를 확인해주세요.");
+	}
+	
+	$("#findId").click(function() {
+		window.open("findId.do", "findId", "width= 800, height= 400, top= 200, left= 600");
+	});
+	
+	$("#findPw").click(function() {
+		window.open("findPw.do", "findPw", "width= 800, height= 400, top= 200, left= 600");
+	});
+});
+</script>
+
+</head>
+<body>
+	<div>
+		<input id="wrong" type="hidden" value="${wrong}">
+		<h2>로그인</h2>
+		<form action="login.do" method="post" id="loginForm">
+			<div>
+				<label for="id">아이디:</label>
+				<input id="id" name="id" placeholder="아이디">
+			</div>
+			<div>
+				<label for="pw">비밀번호:</label>
+				<input type="password" id="pw" name="pw" placeholder="비밀번호">
+				<button type="submit">로그인</button>
+			</div>
+		</form>
+		<c:if test="${wrong==1}">
+			<h3>로그인 처리되지 않았습니다. 아이디나 비밀번호를 다시 확인해 주세요.</h3>
+		</c:if>
+		<c:if test="${wrong==2}">
+			<h3>탈퇴한 회원은 로그인할 수 없습니다.</h3>
+		</c:if>
+		<c:if test="${wrong==3}">
+			<h3>이용정지된 회원은 로그인할 수 없습니다.</h3>
+		</c:if>
+		<div>
+			<button id="findId">아이디찾기</button>
+			<button id="findPw">비밀번호찾기</button>
+		</div>
+	</div>
+</body>
+</html>

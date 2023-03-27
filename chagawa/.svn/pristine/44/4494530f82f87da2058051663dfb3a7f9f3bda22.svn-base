@@ -1,0 +1,317 @@
+package com.chagawa.main;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.chagawa.carpool.controller.CarpoolController;
+import com.chagawa.carpool.dao.CarpoolDAOImpl;
+import com.chagawa.carpool.service.CarpoolApplyServiceImpl;
+import com.chagawa.carpool.service.CarpoolArriveCheckServiceImpl;
+import com.chagawa.carpool.service.CarpoolArriveServiceImpl;
+import com.chagawa.carpool.service.CarpoolCancelServiceImpl;
+import com.chagawa.carpool.service.CarpoolFixServiceImpl;
+import com.chagawa.carpool.service.CarpoolGetInServiceImpl;
+import com.chagawa.carpool.service.CarpoolListServiceImpl;
+import com.chagawa.carpool.service.CarpoolMyDriveListServiceImpl;
+import com.chagawa.carpool.service.CarpoolMyPsgListServiceImpl;
+import com.chagawa.carpool.service.CarpoolNowServiceImpl;
+import com.chagawa.carpool.service.CarpoolStartServiceImpl;
+import com.chagawa.carpool.service.CarpoolStopApplyServiceImpl;
+import com.chagawa.carpool.service.CarpoolViewServiceImpl;
+import com.chagawa.carpool.service.CarpoolWriteServiceImpl;
+import com.chagawa.epilogue.controller.EpilogueController;
+import com.chagawa.epilogue.dao.EpilogueDAOImpl;
+import com.chagawa.epilogue.service.EpilogueDeleteServiceImpl;
+import com.chagawa.epilogue.service.EpilogueListServiceImpl;
+import com.chagawa.epilogue.service.EpilogueUpdateServiceImpl;
+import com.chagawa.epilogue.service.EpilogueViewServiceImpl;
+import com.chagawa.epilogue.service.EpilogueWriteServiceImpl;
+import com.chagawa.member.controller.MemberController;
+import com.chagawa.member.dao.MemberDAOImpl;
+import com.chagawa.member.service.MemberChangeGradeServiceImpl;
+import com.chagawa.member.service.MemberChangePwServiceImpl;
+import com.chagawa.member.service.MemberChangeStatusServiceImpl;
+import com.chagawa.member.service.MemberCheckServiceImpl;
+import com.chagawa.member.service.MemberFindIdServiceImpl;
+import com.chagawa.member.service.MemberFindPwServiceImpl;
+import com.chagawa.member.service.MemberJoinDriverServiceImpl;
+import com.chagawa.member.service.MemberJoinServiceImpl;
+import com.chagawa.member.service.MemberLeaveServiceImpl;
+import com.chagawa.member.service.MemberListServiceImpl;
+import com.chagawa.member.service.MemberLoginServiceImpl;
+import com.chagawa.member.service.MemberMyPageDServiceImpl;
+import com.chagawa.member.service.MemberMyPagePServiceImpl;
+import com.chagawa.member.service.MemberUpdateDServiceImpl;
+import com.chagawa.member.service.MemberUpdateServiceImpl;
+import com.chagawa.member.service.MemberViewDServiceImpl;
+import com.chagawa.member.service.MemberViewPServiceImpl;
+import com.chagawa.message.controller.MessageController;
+import com.chagawa.message.dao.MessageDAOImpl;
+import com.chagawa.message.service.MessageLogServiceImpl;
+import com.chagawa.messageRoom.controller.MessageRoomController;
+import com.chagawa.messageRoom.dao.MessageRoomDAOImpl;
+import com.chagawa.messageRoom.service.MessageRoomDeleteServiceImpl;
+import com.chagawa.messageRoom.service.MessageRoomLeaveServiceImpl;
+import com.chagawa.messageRoom.service.MessageRoomListServiceImpl;
+import com.chagawa.messageRoom.service.MessageRoomWriteServiceImpl;
+import com.chagawa.notice.controller.NoticeController;
+import com.chagawa.notice.dao.NoticeDAOImpl;
+import com.chagawa.notice.service.NoticeDeleteServiceImpl;
+import com.chagawa.notice.service.NoticeListServiceImpl;
+import com.chagawa.notice.service.NoticeUpdateServiceImpl;
+import com.chagawa.notice.service.NoticeViewServiceImpl;
+import com.chagawa.notice.service.NoticeWriteServiceImpl;
+import com.chagawa.point.controller.PointController;
+import com.chagawa.point.dao.PointDAOImpl;
+import com.chagawa.point.service.PointListServiceImpl;
+import com.chagawa.point.service.PointUpdateServiceImpl;
+
+public class Init {
+	// 컨트롤러, DAO, 서비스를 담을 맵 생성
+	private static Map<String, Object> controllerMap = new HashMap<>();
+	private static Map<String, Object> daoMap = new HashMap<>();
+	private static Map<String, ServiceInterface> serviceMap = new HashMap<>();
+
+	public static void init() {
+
+		// 컨트롤러 등록
+		controllerMap.put("messageController", new MessageController());
+		controllerMap.put("messageRoomController", new MessageRoomController());
+		controllerMap.put("memberController", new MemberController());
+		controllerMap.put("epilogueController", new EpilogueController());
+		controllerMap.put("noticeController", new NoticeController());
+		controllerMap.put("pointController", new PointController());
+		controllerMap.put("carpoolController", new CarpoolController());
+
+		// DAO 등록
+		daoMap.put("messageDAO", new MessageDAOImpl());
+		daoMap.put("messageRoomDAO", new MessageRoomDAOImpl());
+		daoMap.put("memberDAO", new MemberDAOImpl());
+		daoMap.put("epilogueDAO", new EpilogueDAOImpl());
+		daoMap.put("noticeDAO", new NoticeDAOImpl());
+		daoMap.put("pointDAO", new PointDAOImpl());
+		daoMap.put("carpoolDAO", new CarpoolDAOImpl());
+
+		// 서비스
+		// 등록------------------------------------------------------------------------
+		serviceMap.put("messageLogServiceImpl", new MessageLogServiceImpl());
+		serviceMap.put("messageRoomListServiceImpl", new MessageRoomListServiceImpl());
+		serviceMap.put("messageRoomLeaveServiceImpl", new MessageRoomLeaveServiceImpl());
+		serviceMap.put("messageRoomDeleteServiceImpl", new MessageRoomDeleteServiceImpl());
+		serviceMap.put("messageRoomWriteServiceImpl", new MessageRoomWriteServiceImpl());
+
+		serviceMap.put("memberLoginServiceImpl", new MemberLoginServiceImpl());
+		serviceMap.put("memberJoinServiceImpl", new MemberJoinServiceImpl());
+		serviceMap.put("memberCheckServiceImpl", new MemberCheckServiceImpl());
+		serviceMap.put("memberMyPageDServiceImpl", new MemberMyPageDServiceImpl());
+		serviceMap.put("memberMyPagePServiceImpl", new MemberMyPagePServiceImpl());
+		serviceMap.put("memberListServiceImpl", new MemberListServiceImpl());
+		serviceMap.put("memberViewPServiceImpl", new MemberViewPServiceImpl());
+		serviceMap.put("memberViewDServiceImpl", new MemberViewDServiceImpl());
+		serviceMap.put("memberChangeStatusServiceImpl", new MemberChangeStatusServiceImpl());
+		serviceMap.put("memberChangeGradeServiceImpl", new MemberChangeGradeServiceImpl());
+		serviceMap.put("memberLeaveServiceImpl", new MemberLeaveServiceImpl());
+		serviceMap.put("memberUpdateServiceImpl", new MemberUpdateServiceImpl());
+		serviceMap.put("memberUpdateDServiceImpl", new MemberUpdateDServiceImpl());
+		serviceMap.put("memberJoinDriverServiceImpl", new MemberJoinDriverServiceImpl());
+		serviceMap.put("memberChangePwServiceImpl", new MemberChangePwServiceImpl());
+		serviceMap.put("memberFindPwServiceImpl", new MemberFindPwServiceImpl());
+		serviceMap.put("memberFindIdServiceImpl", new MemberFindIdServiceImpl());
+
+		serviceMap.put("epilogueListServiceImpl", new EpilogueListServiceImpl());
+		serviceMap.put("epilogueViewServiceImpl", new EpilogueViewServiceImpl());
+		serviceMap.put("epilogueWriteServiceImpl", new EpilogueWriteServiceImpl());
+		serviceMap.put("epilogueUpdateServiceImpl", new EpilogueUpdateServiceImpl());
+		serviceMap.put("epilogueDeleteServiceImpl", new EpilogueDeleteServiceImpl());
+
+		serviceMap.put("noticeListServiceImpl", new NoticeListServiceImpl());
+		serviceMap.put("noticeViewServiceImpl", new NoticeViewServiceImpl());
+		serviceMap.put("noticeWriteServiceImpl", new NoticeWriteServiceImpl());
+		serviceMap.put("noticeUpdateServiceImpl", new NoticeUpdateServiceImpl());
+		serviceMap.put("noticeDeleteServiceImpl", new NoticeDeleteServiceImpl());
+
+		serviceMap.put("pointListServiceImpl", new PointListServiceImpl());
+		serviceMap.put("pointUpdateServiceImpl", new PointUpdateServiceImpl());
+//		serviceMap.put("pointWriteServiceImpl", new PointWriteServiceImpl());
+
+		serviceMap.put("carpoolListService", new CarpoolListServiceImpl());
+		serviceMap.put("carpoolMyDriveListService", new CarpoolMyDriveListServiceImpl());
+		serviceMap.put("carpoolMyPsgListService", new CarpoolMyPsgListServiceImpl());
+		serviceMap.put("carpoolNowService", new CarpoolNowServiceImpl());
+		serviceMap.put("carpoolViewService", new CarpoolViewServiceImpl());
+		serviceMap.put("carpoolWriteService", new CarpoolWriteServiceImpl());
+		serviceMap.put("carpoolApplyService", new CarpoolApplyServiceImpl());
+		serviceMap.put("carpoolFixService", new CarpoolFixServiceImpl());
+		serviceMap.put("carpoolStopApplyService", new CarpoolStopApplyServiceImpl());
+		serviceMap.put("carpoolGetInService", new CarpoolGetInServiceImpl());
+		serviceMap.put("carpoolStartService", new CarpoolStartServiceImpl());
+		serviceMap.put("carpoolArriveService", new CarpoolArriveServiceImpl());
+		serviceMap.put("carpoolArriveCheckService", new CarpoolArriveCheckServiceImpl());
+		serviceMap.put("carpoolCancelService", new CarpoolCancelServiceImpl());
+
+		// 각 서비스에 DAO 연결--------------------------------------------------------
+		serviceMap.get("messageLogServiceImpl").setDao(daoMap.get("messageDAO"));
+		serviceMap.get("messageRoomListServiceImpl").setDao(daoMap.get("messageRoomDAO"));
+		serviceMap.get("messageRoomLeaveServiceImpl").setDao(daoMap.get("messageRoomDAO"));
+		serviceMap.get("messageRoomDeleteServiceImpl").setDao(daoMap.get("messageRoomDAO"));
+		serviceMap.get("messageRoomWriteServiceImpl").setDao(daoMap.get("messageRoomDAO"));
+
+		serviceMap.get("memberLoginServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberJoinServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberCheckServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberMyPageDServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberMyPagePServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberListServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberViewPServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberViewDServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberChangeStatusServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberChangeGradeServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberLeaveServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberUpdateServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberUpdateDServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberJoinDriverServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberChangePwServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberFindPwServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberFindIdServiceImpl").setDao(daoMap.get("memberDAO"));
+
+		serviceMap.get("epilogueListServiceImpl").setDao(daoMap.get("epilogueDAO"));
+		serviceMap.get("epilogueViewServiceImpl").setDao(daoMap.get("epilogueDAO"));
+		serviceMap.get("epilogueWriteServiceImpl").setDao(daoMap.get("epilogueDAO"));
+		serviceMap.get("epilogueUpdateServiceImpl").setDao(daoMap.get("epilogueDAO"));
+		serviceMap.get("epilogueDeleteServiceImpl").setDao(daoMap.get("epilogueDAO"));
+
+		serviceMap.get("noticeListServiceImpl").setDao(daoMap.get("noticeDAO"));
+		serviceMap.get("noticeViewServiceImpl").setDao(daoMap.get("noticeDAO"));
+		serviceMap.get("noticeWriteServiceImpl").setDao(daoMap.get("noticeDAO"));
+		serviceMap.get("noticeUpdateServiceImpl").setDao(daoMap.get("noticeDAO"));
+		serviceMap.get("noticeDeleteServiceImpl").setDao(daoMap.get("noticeDAO"));
+
+		serviceMap.get("pointListServiceImpl").setDao(daoMap.get("pointDAO"));
+		serviceMap.get("pointUpdateServiceImpl").setDao(daoMap.get("pointDAO"));
+//		serviceMap.get("pointWriteServiceImpl").setDao(daoMap.get("pointDAO"));
+
+		serviceMap.get("carpoolListService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolMyDriveListService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolMyPsgListService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolNowService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolViewService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolWriteService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolApplyService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolFixService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolStopApplyService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolGetInService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolStartService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolArriveService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolArriveCheckService").setDao(daoMap.get("carpoolDAO"));
+		serviceMap.get("carpoolCancelService").setDao(daoMap.get("carpoolDAO"));
+
+		// 각 컨트롤러에 서비스 연결------------------------------------------------------------
+		((MessageRoomController) controllerMap.get("messageRoomController"))
+				.setMessageRoomListService(serviceMap.get("messageRoomListServiceImpl"));
+		((MessageRoomController) controllerMap.get("messageRoomController"))
+		.setMessageRoomLeaveService(serviceMap.get("messageRoomLeaveServiceImpl"));
+		((MessageRoomController) controllerMap.get("messageRoomController"))
+		.setMessageRoomDeleteService(serviceMap.get("messageRoomDeleteServiceImpl"));
+		((MessageController) controllerMap.get("messageController"))
+		.setMessageLogService(serviceMap.get("messageLogServiceImpl"));
+
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberLoginService(serviceMap.get("memberLoginServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberJoinService(serviceMap.get("memberJoinServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberCheckService(serviceMap.get("memberCheckServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberMyPageDService(serviceMap.get("memberMyPageDServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberMyPagePService(serviceMap.get("memberMyPagePServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberListService(serviceMap.get("memberListServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberViewPService(serviceMap.get("memberViewPServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberViewDService(serviceMap.get("memberViewDServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberChangeStatusService(serviceMap.get("memberChangeStatusServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberChangeGradeService(serviceMap.get("memberChangeGradeServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberLeaveService(serviceMap.get("memberLeaveServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberUpdateService(serviceMap.get("memberUpdateServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberUpdateDService(serviceMap.get("memberUpdateDServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberJoinDriverService(serviceMap.get("memberJoinDriverServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberChangePwService(serviceMap.get("memberChangePwServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberFindPwService(serviceMap.get("memberFindPwServiceImpl"));
+		((MemberController) controllerMap.get("memberController"))
+				.setMemberFindIdService(serviceMap.get("memberFindIdServiceImpl"));
+
+		((EpilogueController) controllerMap.get("epilogueController"))
+				.setEpilogueListService(serviceMap.get("epilogueListServiceImpl"));
+		((EpilogueController) controllerMap.get("epilogueController"))
+				.setEpilogueViewService(serviceMap.get("epilogueViewServiceImpl"));
+		((EpilogueController) controllerMap.get("epilogueController"))
+				.setEpilogueWriteService(serviceMap.get("epilogueWriteServiceImpl"));
+		((EpilogueController) controllerMap.get("epilogueController"))
+				.setEpilogueUpdateService(serviceMap.get("epilogueUpdateServiceImpl"));
+		((EpilogueController) controllerMap.get("epilogueController"))
+				.setEpilogueDeleteService(serviceMap.get("epilogueDeleteServiceImpl"));
+
+		((NoticeController) controllerMap.get("noticeController"))
+				.setNoticeListService(serviceMap.get("noticeListServiceImpl"));
+		((NoticeController) controllerMap.get("noticeController"))
+				.setNoticeViewService(serviceMap.get("noticeViewServiceImpl"));
+		((NoticeController) controllerMap.get("noticeController"))
+				.setNoticeWriteService(serviceMap.get("noticeWriteServiceImpl"));
+		((NoticeController) controllerMap.get("noticeController"))
+				.setNoticeUpdateService(serviceMap.get("noticeUpdateServiceImpl"));
+		((NoticeController) controllerMap.get("noticeController"))
+				.setNoticeDeleteService(serviceMap.get("noticeDeleteServiceImpl"));
+
+		((PointController) controllerMap.get("pointController"))
+				.setPointListService(serviceMap.get("pointListServiceImpl"));
+		((PointController) controllerMap.get("pointController"))
+				.setPointUpdateService(serviceMap.get("pointUpdateServiceImpl"));
+//		((PointController) controllerMap.get("pointController"))
+//				.setPointWriteService(serviceMap.get("pointWriteServiceImpl"));
+
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolListService(serviceMap.get("carpoolListService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolMyDriveListService(serviceMap.get("carpoolMyDriveListService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolMyPsgListService(serviceMap.get("carpoolMyPsgListService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolNowService(serviceMap.get("carpoolNowService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolViewService(serviceMap.get("carpoolViewService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolWriteService(serviceMap.get("carpoolWriteService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolApplyService(serviceMap.get("carpoolApplyService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolFixService(serviceMap.get("carpoolFixService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolStopApplyService(serviceMap.get("carpoolStopApplyService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolGetInService(serviceMap.get("carpoolGetInService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolStartService(serviceMap.get("carpoolStartService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolArriveService(serviceMap.get("carpoolArriveService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolArriveCheckService(serviceMap.get("carpoolArriveCheckService"));
+		((CarpoolController) controllerMap.get("carpoolController"))
+				.setCarpoolCancelService(serviceMap.get("carpoolCancelService"));
+
+	}
+
+	public static Object getController(String controller) {
+		return controllerMap.get(controller);
+	}
+
+}

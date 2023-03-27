@@ -1,0 +1,5 @@
+package com.chagawa.notice.vo;
+
+public class NoticeVO {
+
+}

@@ -1,0 +1,119 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="pageNav" tagdir="/WEB-INF/tags"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내 이용내역</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		if ("${param.isDriver}") {
+			$("#isDriver").val("${param.isDriver}");
+		}
+	});
+</script>
+<style type="text/css">
+.circle {
+	background-color: #ECF2FA;
+	float: left;
+	border-radius: 50%;
+	width: 70px;
+	height: 70px;
+	margin: 30px;
+}
+
+.circle h4 {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.page {
+	clear: left;
+}
+
+.mylist {
+	clear: both;
+}
+
+.driveInfo {
+	float: left;
+}
+
+.reviewBtn {
+	margin-right: 25%;
+}
+
+.psgInfo {
+	clear: both;
+	margin-top: 10px;
+	margin-left: 150px;
+	padding-left: 20px;
+}
+</style>
+</head>
+<body>
+	<div class="container">
+		<h1>카풀 이용내역</h1>
+		<div class="form">
+			<form>
+				<select id="isDriver" class="form-control"
+					style="width: 150px; float: left; margin-right: 20px;"
+					name="isDriver" required="required">
+					<option value="driver">운행</option>
+					<option value="psg">동승</option>
+				</select> <input type="hidden" name="id" id="id" value=${login.id }>
+				<button class="btn btn-default btn-sm">조회</button>
+			</form>
+		</div>
+		<c:if test="${mylist != null }">
+			<div class="mylist">
+				<c:forEach items="${mylist }" var="vo">
+					<div class="eachList">
+						<hr>
+						<div class="cpInfo">
+							<div class="circle">
+								<h4>${vo.psgFixCount}/${vo.psgGotCount }/${vo.seats }</h4>
+							</div>
+							<div class="driveInfo">
+								<b>${vo.no }</b>번 차 <span class="label label-default">${vo.status }</span><br>
+								<h4>
+									[${vo.startRegion }] <b>${vo.startAddress }</b> ▶
+									[${vo.arriveRegion }] <b>${vo.arriveAddress }</b>
+								</h4>
+								${vo.startTime } 출발 ▷ ${vo.arriveTime } 도착<br> 드라이버 <b>${vo.nickname }</b>
+								/ 동승료 <b>${vo.price }</b> 포인트 / 동승자 <b>${vo.psgGotCount }</b>명<br>
+								<b>차량정보</b> ${vo.carNo }(${vo.carModel })
+							</div>
+							<c:if test="${vo.reviewed == 0 }">
+								<div style="height: 60px;"></div>
+								<div class="reviewBtn">
+									<a href="#" class="btn btn-primary pull-right">후기작성</a>
+								</div>
+							</c:if>
+						</div>
+						<div class="well psgInfo" style="width: 30%;">
+							<c:forEach items="${vo.psgList }" var="pvo">
+								<div class="eachPsg">
+									${pvo.nickname } <span class="label label-default">${pvo.status }</span><br>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+				</c:forEach>
+				<div class="col-md-9">
+					<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
+				</div>
+			</div>
+		</c:if>
+	</div>
+</body>
+</html>

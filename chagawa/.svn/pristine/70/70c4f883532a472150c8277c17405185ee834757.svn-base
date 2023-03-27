@@ -1,0 +1,5 @@
+package com.chagawa.notice.controller;
+
+public class NoticeController {
+
+}

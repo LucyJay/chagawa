@@ -1,0 +1,27 @@
+package com.chagawa.member.dao;
+
+import java.util.List;
+
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.member.vo.MemberVO;
+
+public interface MemberDAO {
+	
+	public LoginVO login(LoginVO inVO) throws Exception;
+	public Integer join(MemberVO vo) throws Exception;
+	public boolean checkId(String id) throws Exception;
+	
+	//회원-----------------------------------------------------
+	public MemberVO myPageD(String id) throws Exception;
+	public MemberVO myPageP(String id) throws Exception;
+	
+	public Integer leave(MemberVO vo) throws Exception;
+	
+	//관리자----------------------------------------------------
+	public List<MemberVO> list() throws Exception;
+	public MemberVO viewD(String id) throws Exception;
+	public MemberVO viewP(String id) throws Exception;
+	public Integer changeStatus(MemberVO vo) throws Exception;
+	public Integer changeGrade(MemberVO vo) throws Exception;
+	
+}

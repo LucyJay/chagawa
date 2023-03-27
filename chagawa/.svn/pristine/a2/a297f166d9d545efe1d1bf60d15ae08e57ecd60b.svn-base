@@ -1,0 +1,65 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>메시지 로그</title>
+
+<!-- 라이브러리 등록  : CDN 방식 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+.admin-message {
+    
+    text-align: right;
+}
+
+.passenger-message {
+   
+    text-align: left;
+}
+</style>
+<script>
+$(function(){
+	$("#button").click(function(){
+    var roomNo = $('#message-container h1').text();  // roomNo 값을 가져
+	location = "/message/messagewrite.do?roomNo="+ roomNo;		
+	})
+ 
+});
+</script>	
+
+
+</head>
+<body>
+<div class="container">
+	<h1>${param.roomNo }</h1>
+	<div id="message-container">
+		<c:forEach items="${list}" var="message">
+			<div class="message-row">
+				<c:if test="${message.sender eq 'admin'}">
+					<div class="admin-message">${message.content}</div>
+					<div class="admin-message">${message.sendDate}</div>
+					
+				</c:if>
+				<c:if test="${message.sender eq 'passenger'}">
+					<div class="passenger-message">${message.content}</div>
+					<div class="passenger-message">${message.sendDate}</div>
+				</c:if>
+			</div>
+		</c:forEach>
+		<form action="write.do" method="post" id="writeForm">
+		<div class="form-group">
+			<input type="text" id="content" class="form-control" />
+		</div>
+    		<button id="send-button">보내기</button>
+		</form>
+	</div>
+	</div>
+</body>
+</html>

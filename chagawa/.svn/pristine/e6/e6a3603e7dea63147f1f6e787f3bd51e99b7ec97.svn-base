@@ -1,0 +1,67 @@
+package com.chagawa.main;
+
+import java.io.IOException;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.catalina.connector.Request;
+
+/**
+ * Servlet implementation class DispatcherServlet
+ */
+@WebServlet("/DispatcherServlet")
+public class DispatcherServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public DispatcherServlet() {
+		super();
+	}
+
+	/**
+	 * @see Servlet#init(ServletConfig)
+	 */
+	public void init(ServletConfig config) throws ServletException {
+		Init.init();
+		System.out.println("서버 가동: Init.init() 실행 완료");
+	}
+
+	/**
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		try {
+			String uri = request.getRequestURI();
+			System.out.println("요청한 페이지: " + uri);
+			String jsp = "";
+
+			// uri에 따른 컨트롤러 이동 -> jsp에 결과 세팅
+			if (uri.equals("/") || uri.equals("/index.do")) {
+				jsp = "main/main";
+			} else if (uri.startsWith("/notice/")) {
+
+			}
+
+			// jsp에 따른 이동 -> redirect면 다음 url로 페이지를 이동시키고, 아니면 jsp 파일을 실행시켜 화면에 출력
+			if (jsp.startsWith("redirect:")) {
+				response.sendRedirect(jsp.substring(9));
+			} else {
+				request.getRequestDispatcher("/WEB-INF/views/" + jsp + ".jsp").forward(request, response);
+			}
+		} catch (
+
+		Exception e) {
+			e.printStackTrace();
+
+		}
+	}
+
+}

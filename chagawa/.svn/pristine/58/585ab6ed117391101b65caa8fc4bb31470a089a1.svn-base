@@ -1,0 +1,87 @@
+package com.chagawa.notice.vo;
+
+public class NoticeVO {
+
+	private long no;
+	private String title, content, startDate, endDate, writeDate, updateDate, gnrFile, imgFile;
+
+	public long getNo() {
+		return no;
+	}
+
+	public void setNo(long no) {
+		this.no = no;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getWriteDate() {
+		return writeDate;
+	}
+
+	public void setWriteDate(String writeDate) {
+		this.writeDate = writeDate;
+	}
+
+	public String getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+
+	public String getGnrFile() {
+		return gnrFile;
+	}
+
+	public void setGnrFile(String gnrFile) {
+		this.gnrFile = gnrFile;
+	}
+
+	public String getImgFile() {
+		return imgFile;
+	}
+
+	public void setImgFile(String imgFile) {
+		this.imgFile = imgFile;
+	}
+
+	@Override
+	public String toString() {
+		return "NoticeVO [no=" + no + ", title=" + title + ", content=" + content + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", writeDate=" + writeDate + ", updateDate=" + updateDate + ", gnrFile="
+				+ gnrFile + ", imgFile=" + imgFile + "]";
+	}
+
+}

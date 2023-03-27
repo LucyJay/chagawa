@@ -1,0 +1,172 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#checkId").click(function() {
+			if (!checkData(reg_id, $("#id"), reg_id_error_msg, 1)) return false;
+			window.open("checkId.do?id=" + $("#id").val(), "checkId", "width= 800, height= 400, top= 200, left= 600");
+		});
+		$("#checkNickname").click(function() {
+			if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+			window.open("checkNickname.do?nickname=" + $("#nickname").val(), "checkNickname", "width= 800, height= 400, top= 200, left= 600");
+		});
+		$("#checkTel").click(function() {
+			if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+			if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+			window.open("checkTel.do?tel_1="+$("#tel_1").val()+"&tel_2="+$("#tel_2").val()+"&tel_3="+$("#tel_3").val(), "checkTel", "width= 800, height= 400, top= 200, left= 600");
+		});
+
+		$("#joinForm").submit(function() {
+			if (!checkData(reg_id, $("#id"), reg_id_error_msg, 1)) return false;
+			if (!checkData(reg_pw, $("#pw"), reg_pw_error_msg, 0)) {
+				$("#pw").val("");
+				return false;
+			}
+			if (!checkData(reg_pw, $("#pw2"), reg_pw_error_msg, 0)) {
+				$("#pw2").val("");
+				return false;
+			}
+			if ($("#pw").val() != $("#pw2").val()) {
+				alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+				$("#pw, #pw2").val("");
+				return false;
+			}
+			if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+			if (!checkData(reg_name, $("#name"), reg_name_error_msg, 1)) return false;
+			if($("#gender").val() == "-성별-"){
+				alert("성별을 선택해주세요.");
+				return false;
+			}
+			if (!checkData(reg_dateY, $("#birth_y"), reg_dateY_error_msg, 1)) return false;
+			if($("#birth_m").val() == "-월-"){
+				alert("월을 선택해주세요.");
+				return false;
+			}
+			if (!checkData(reg_dateD, $("#birth_d"), reg_dateD_error_msg, 1)) return false;
+			if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+			if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+			if($("#bank").val() == "-은행-"){
+				alert("은행을 선택해주세요.");
+				return false;
+			}
+			if (!checkData(reg_account, $("#account"), reg_account_error_msg, 1)) return false;
+			
+			alert("회원가입이 완료되었습니다.");
+		});
+
+		$("#cancelBtn").click(function() {
+			history.back();
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div>
+		<h1>회원가입</h1>
+		<form action="join.do" method="post" id="joinForm" enctype="multipart/form-data">
+			<div>
+				<label for="id">아이디:</label>
+				<input name="id" id="id" value="${param.id}">
+				<button type="button" id="checkId">중복확인</button>
+			</div>
+			<div>
+				<label for="pw">비밀번호:</label>
+				<input name="pw" id="pw" type="password">
+			</div>
+			<div>
+				<label for="pw2">비밀번호 확인:</label>
+				<input name="pw2" id="pw2" type="password">
+			</div>
+			<div>
+				<label for="nickname">닉네임:</label>
+				<input name="nickname" id="nickname">
+				<button type="button" id="checkNickname">중복확인</button>
+			</div>
+			<div>
+				<label for="name">이름:</label>
+				<input name="name" id="name">
+			</div>
+			<div>
+				<label for="profileImage">프로필사진:</label>
+				<input name="profileImage" id="profileImageame" type="file">
+			</div>
+			<div>
+				<label for="gender">성별:</label>
+				<select name="gender" id="gender">
+					<option selected>-성별-</option>
+					<option>남자</option>
+					<option>여자</option>
+				</select>
+			</div>
+			<div>
+				<label for="birth_y">생년월일:</label>
+				<input name="birth_y" id="birth_y">
+				<select name="birth_m" id="birth_m">
+					<option selected>-월-</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+					<option>6</option>
+					<option>7</option>
+					<option>8</option>
+					<option>9</option>
+					<option>10</option>
+					<option>11</option>
+					<option>12</option>
+				</select>
+				<input name="birth_d" id="birth_d">
+			</div>
+			<div>
+				<label for="tel_1">연락처:</label>
+				<select name="tel_1" id="tel_1">
+					<option>010</option>
+					<option>011</option>
+					<option>012</option>
+					<option>013</option>
+					<option>014</option>
+					<option>015</option>
+					<option>016</option>
+					<option>017</option>
+					<option>018</option>
+					<option>019</option>
+				</select>
+				<input name="tel_2" id="tel_2">
+				<input name="tel_3" id="tel_3">
+				<button type="button" id="checkTel">중복확인</button>
+			</div>
+			<div>
+				<label for="bank">계좌:</label>
+				<select name="bank" id="bank">
+					<option selected>-은행-</option>
+					<option>농협</option>
+					<option>신한</option>
+					<option>국민</option>
+					<option>우리</option>
+					<option>하나</option>
+					<option>카카오</option>
+					<option>새마을</option>
+					<option>우체국</option>
+				</select>
+				<input name="account" id="account">
+			</div>
+			<div>
+				<button>회원가입</button>
+				<button type="reset">새로입력</button>
+				<button type="button" id="cancelBtn">취소</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

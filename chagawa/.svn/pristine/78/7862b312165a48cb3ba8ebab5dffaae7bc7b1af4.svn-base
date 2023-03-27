@@ -1,0 +1,181 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지 사항</title>
+
+<!-- 라이브러리 등록 - CDN 방식 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#deleteBtn").click(function() {
+			if (!confirm("정말 삭제하시겠습니까?"))
+				return false;
+		});
+
+		$("#changeImageBtn").click(function() {
+			$("#changeImageDiv").slideDown();
+		});
+
+		$("#cancelImgBtn").click(function() {
+			$("#changeImageDiv").slideUp();
+		});
+
+		$("#updateImageForm").submit(function() {
+			if (!$("#imgFile").val()) {
+				alert("이미지 파일을 선택하셔야 합니다.");
+				return false;
+			}
+		});
+
+		$("#changeGnrBtn").click(function() {
+			$("#changeGnrDiv").slideDown();
+		});
+
+		$("#cancelGnrBtn").click(function() {
+			$("#changeGnrDiv").slideUp();
+		});
+
+		$("#updateGnrForm").submit(function() {
+			if (!$("#gnrFile").val()) {
+				alert("파일을 선택하셔야 합니다.");
+				return false;
+			}
+		});
+	});
+</script>
+
+<style type="text/css">
+h2 {
+	color: #4B89DC;
+	font-weight: bold;
+	text-align: center;
+}
+
+th {
+	width: 200px;
+	text-align: center;
+	background: #4B89DC;
+	opacity: 0.9;
+	color: #EDF3FB;
+	valign: middle;
+}
+
+td {
+	text-align: center;
+}
+
+th, td {
+	border-bottom: 1px solid #dcdcdc;
+	border-left: 1px solid #dcdcdc;
+	padding: 10px;
+}
+
+th:first-child, td:first-child {
+	border-left: none;
+}
+
+#changeImageDiv {
+	display: none;
+}
+
+#changeGnrDiv {
+	display: none;
+}
+</style>
+</head>
+
+<body>
+	<div class="container">
+		<h2 style="text-align: center;">공지 사항</h2>
+		<br>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>번호</th>
+					<td style="text-align: left">${vo.no }</td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td style="text-align: left">${vo.title }</td>
+				</tr>
+				<tr>
+					<th style="vertical-align: middle;">내용</th>
+					<td style="text-align: left">${vo.content }</td>
+				</tr>
+				<tr>
+					<th style="vertical-align: middle;">이미지 파일</th>
+					<td><img src="${vo.imgFile }" onerror="this.style.display='none'" alt='' style="padding: 10px" />
+						<c:if test="${ login != null && login.gradeNo == 9 }">
+							<div>
+								<button class="btn btn-danger btn-xs" id="changeImageBtn" style="margin: 10px">이미지 변경</button>
+							</div>
+							<div id="changeImageDiv">
+								<form action="updateImg.do" method="post" id="updateImageForm" enctype="multipart/form-data">
+									<input type="hidden" name="no" value="${vo.no }">
+									<input type="hidden" name="deleteFile" value="${vo.imgFile }">
+									<div class="form-group">
+										<input class="form-control" name="imgFile" id="imgFile" type="file" accept="image/*">
+									</div>
+									<div style="float: right;">
+										<button class="btn btn-default btn-xs">적용</button>
+										<button class="btn btn-default btn-xs" type="button"
+											id="cancelImgBtn">취소</button>
+									</div>
+								</form>
+							</div>
+						</c:if></td>
+				</tr>
+				<tr>
+					<th style="vertical-align: middle;">일반 파일</th>
+					<td><a href="${vo.gnrFile }" download>${vo.gnrFile.substring(15) }</a>
+						<c:if test="${ login != null && login.gradeNo == 9 }">
+							<div>
+								<button class="btn btn-danger btn-xs" id="changeGnrBtn" style="margin: 10px">파일 변경</button>
+							</div>
+							<div id="changeGnrDiv">
+								<form action="updateGnr.do" method="post" id="updateGnrForm" enctype="multipart/form-data">
+									<input type="hidden" name="no" value="${vo.no }">
+									<input type="hidden" name="deleteGnrFile" value="${vo.gnrFile }">
+									<div class="form-group">
+										<input class="form-control" name="gnrFile" id="gnrFile" type="file">
+									</div>
+									<div style="float: right;">
+										<button class="btn btn-default btn-xs">적용</button>
+										<button class="btn btn-default btn-xs" type="button" id="cancelGnrBtn">취소</button>
+									</div>
+								</form>
+							</div>
+						</c:if></td>
+				</tr>
+				<tr>
+					<th>시작일</th>
+					<td style="text-align: left">${vo.startDate }</td>
+				</tr>
+				<tr>
+					<th>종료일</th>
+					<td style="text-align: left">${vo.endDate }</td>
+				</tr>
+				<tr>
+					<th>최종 수정일</th>
+					<td style="text-align: left">${vo.updateDate }</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class=" text-right" style="margin-top: 20px;">
+			<c:if test="${ login != null && login.gradeNo == 9 }">
+				<a href="update.do?no=${vo.no }&page=${param.page}&perPageNum=${param.perPageNum}&key=${param.key }&word=${param.word}" class="btn btn-default">수정</a>
+				<a href="delete.do?no=${vo.no }&perPageNum=${param.perPageNum}" class="btn btn-default" id="deleteBtn">삭제</a>
+			</c:if>
+			<a href="list.do?page=${param.page }&perPageNum=${param.perPageNum}&key=${param.key }&word=${param.word}" class="btn btn-default">리스트</a>
+		</div>
+	</div>
+</body>
+</html>

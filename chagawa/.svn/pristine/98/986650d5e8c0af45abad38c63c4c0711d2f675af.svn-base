@@ -1,0 +1,68 @@
+package com.chagawa.member.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import com.chagawa.io.db.DB;
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.member.vo.MemberVO;
+
+public class MemberDAOImpl implements MemberDAO {
+
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	@Override
+	public LoginVO login(LoginVO inVO) throws Exception {
+		System.out.println("MemberDAOImpl-----------------------");
+		LoginVO vo = null;
+		try {
+			con = DB.getConnection();
+			
+			String sql = "select m.id, m.pw, m.name, m.tel, m.status, m.gradeNo, g.gradeName "
+					+ " from member m, grade g "
+					+ " where (id = ? and pw = ?) and (g.gradeNo = m.gradeNo)";
+			
+			pstmt = con.prepareStatement(sql);
+			pstmt.setNString(1, inVO.getId());
+			pstmt.setNString(2, inVO.getPw());
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs != null && rs.next()) {
+				vo = new LoginVO();
+				vo.setId(rs.getString("id"));
+				vo.setPw(rs.getString("pw"));
+				vo.setName(rs.getString("name"));
+				vo.setTel(rs.getString("tel"));
+				vo.setStatus(rs.getString("status"));
+				vo.setGradeNo(rs.getLong("gradeNo"));
+				vo.setName(rs.getString("gradeName"));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception("로그인 DB");
+		} finally {
+			DB.close(con, pstmt, rs);
+		} // end of try~catch~finally
+		
+		return vo;
+	}
+
+	
+	
+	@Override
+	public Integer join(MemberVO vo) throws Exception {
+		return null;
+	}
+
+	
+	
+	@Override
+	public boolean checkId(String id) throws Exception {
+		return false;
+	}
+
+}

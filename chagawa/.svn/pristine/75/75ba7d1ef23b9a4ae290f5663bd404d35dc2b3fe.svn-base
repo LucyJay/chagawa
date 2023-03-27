@@ -1,0 +1,34 @@
+package com.chagawa.messageRoom.dao;
+
+import java.util.List;
+
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.message.vo.MessageVO;
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.message.vo.MessageVO;
+//import com.chagawa.util.PageObject;
+
+public interface MessageRoomDAO {
+
+
+	List<MessageRoomVO> list(String id) throws Exception;
+
+//	public long getTotalRow(PageObject pageObject) throws Exception;
+//	
+//	public NoticeVO view(long no) throws Exception;
+//	
+	public int increase(String id) throws Exception;
+//
+	public int write(String id, String par1) throws Exception;
+//
+//	public int delete(MessageRoomVO vo) throws Exception;
+//
+	public int leave(long roomno ,String id) throws Exception;
+//	
+
+	public int delete() throws Exception;
+
+	public long findroomno(String par1, String id) throws Exception;
+
+	
+}

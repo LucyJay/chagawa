@@ -1,0 +1,26 @@
+package com.chagawa.messageRoom.service;
+
+import com.chagawa.messageRoom.dao.MessageRoomDAO;
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.LoginVO;
+
+public class MessageRoomListServiceImpl implements ServiceInterface{
+	private MessageRoomDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		// TODO Auto-generated method stub
+		this.dao = (MessageRoomDAO)obj;
+	}
+	
+	public Object service(Object obj) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("MessageRoomListServiceImpl.service()");
+		return dao.list((String) obj);
+	}
+
+
+
+
+}

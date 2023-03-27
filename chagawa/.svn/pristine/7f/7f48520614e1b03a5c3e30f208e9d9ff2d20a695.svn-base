@@ -1,0 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#changeBtn").click(function() {
+		opener.parent.location = "myPage.do?id="+$("#id").val()+"&pw="+$("#pw").val()+"&oldPw="+$("#oldPw").val();
+		window.close();
+	});
+});
+</script>
+
+</head>
+<body>
+<div>
+	<form action="changePw.do" method="post">
+		<input name="id" id="id" type="hidden" value="${param.id}">
+		<label for="oldPw">기존 비밀번호</label>
+		<input name="oldPw" id="oldPw" type="password">
+		<label for="pw">새 비밀번호</label>
+		<input name="pw" id="pw" type="password">
+		<label for="checkPw">비밀번호 확인</label>
+		<input name="checkPw" id="checkPw" type="password">
+		
+		<button id="changeBtn">변경하기</button>
+	</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+package com.chagawa.carpool.service;
+
+import com.chagawa.carpool.dao.CarpoolDAO;
+import com.chagawa.carpool.vo.CarpoolVO;
+import com.chagawa.main.ServiceInterface;
+
+public class CarpoolViewServiceImpl implements ServiceInterface {
+
+	private CarpoolDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (CarpoolDAO) dao;
+	}
+
+	@Override
+	public Object service(Object obj) throws Exception {
+		CarpoolVO vo = dao.view((Long) obj);
+		if (vo != null) {
+			vo.setPsgList(dao.psgList(vo.getNo()));
+		}
+		return vo;
+	}
+
+}

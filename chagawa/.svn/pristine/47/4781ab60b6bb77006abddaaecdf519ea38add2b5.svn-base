@@ -1,0 +1,136 @@
+package com.chagawa.messageRoom.controller;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.chagawa.message.vo.MessageVO;
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.LoginVO;
+
+public class MessageRoomController {
+
+	// private 변수로 MessageService
+	private ServiceInterface messageRoomListService;
+	private ServiceInterface messageViewService;
+	private ServiceInterface messageWriteService;
+	private ServiceInterface messageUpdateService;
+	private ServiceInterface messageDeleteService;
+	// setter를 만들어서 생성된 service를 받는다.
+	public void setMessageRoomListService(ServiceInterface messageRoomListService) {
+		this.messageRoomListService = messageRoomListService;
+	}
+	public void setMessageRoomViewService(ServiceInterface messageViewService) {
+		this.messageViewService = messageViewService;
+	}
+	public void setMessageWriteService(ServiceInterface messageWriteService) {
+		this.messageWriteService = messageWriteService;
+	}
+	public void setMessageUpdateService(ServiceInterface messageUpdateService) {
+		this.messageUpdateService = messageUpdateService;
+	}
+	public void setMessageDeleteService(ServiceInterface messageDeleteService) {
+		this.messageDeleteService = messageDeleteService;
+	}
+	
+	// 실행 메서드 -> 리턴 String 데이터를 jsp 또는 url 정보가 된다.
+	public String execute(HttpServletRequest request) throws Exception{
+		System.out.println("MessageRoomController.execute().request : " + request);
+		// 어떤 요청
+		String uri = request.getRequestURI();
+		String jsp = null;
+		HttpSession session = request.getSession();
+		// 처리 
+		switch (uri) {
+		case "/messageroom/list.do":
+			MessageRoomVO MRVO = new MessageRoomVO();
+//			LoginVO loginVO = (LoginVO) request.getSession().getAttribute("login");
+//			MRVO.setPar1(loginVO.getId());
+			
+			request.setAttribute("list", Execute.run(messageRoomListService, null));
+			jsp = "messageRoom/list";
+			break;
+
+		case "/message/view.do":
+			// 글보기라고 생각을 하고 처리해 보자.
+			// 데이터 수집 -> 반드시 리스트 부터 시작하여야 데이터가 넘어온다.
+			String noStr = request.getParameter("no");
+			long no = Long.parseLong(noStr);
+			// 데이터 처리 -> request에 담는다. -> jsp에서 꺼내 쓴다. EL 객체 사용
+			MessageVO viewVO 
+			= (MessageVO) Execute.run(messageViewService, no);
+			// 내용 줄바꿈 처리
+			viewVO.setContent(viewVO.getContent().replace("\n", "<br/>"));
+			request.setAttribute("vo", viewVO);
+			jsp = "message/view";
+			break;
+			
+		case "/message/write.do":
+			if(request.getMethod().equals("GET")) {
+				jsp = "message/write";
+			} else {
+				// 페이지 데이터 수집 -> perPageNumStr을 URL 뒤에 붙여서 사용하자.
+				// String perPageNumStr = request.getParameter("perPageNum");
+				// 데이터 수집
+				MessageVO writeVO = new MessageVO();
+//				writeVO.setTitle(request.getParameter("title"));
+				writeVO.setContent(request.getParameter("content"));
+				// 글등록 처리해 보자.
+				Execute.run(messageWriteService, writeVO);
+				jsp = "redirect:list.do?perPageNum="
+						+ request.getParameter("perPageNum") ;
+			}
+			break;
+			
+		case "/message/update.do":
+			// DB에서 데이터 가져오기
+			// 데이터 수집 -> 반드시 리스트 부터 시작하여야 데이터가 넘어온다.
+			String updateNoStr = request.getParameter("no");
+			long updateNo = Long.parseLong(updateNoStr);
+			// 수정에서의 데이터 가져오기 조회수 1증가 하지 않는다. -> 0 으로 강제 입력
+//				String incStr = request.getParameter("inc");
+//				int inc = Integer.parseInt(incStr);
+			if(request.getMethod().equals("GET")) {
+				// 데이터 처리 -> request에 담는다. -> jsp에서 꺼내 쓴다. EL 객체 사용
+				request.setAttribute("vo",
+						Execute.run(messageViewService, new Object[] {updateNo,0}));
+				jsp = "message/update";
+			} else {
+				MessageVO updateVO = new MessageVO();
+				// 데이터 수집 vo 넣기
+				updateVO.setNo(updateNo);
+//				updateVO.setTitle(request.getParameter("title"));
+				updateVO.setContent(request.getParameter("content"));
+				
+				// DB 처리
+				Execute.run(messageUpdateService, updateVO);
+				
+				// 글보기로 자동이동 - 글번호와  inc가 필요하다. inc는 무조건 0이다.
+				jsp = "redirect:view.do?no=" + updateNo + "&inc=0"
+						+ "&page=" + request.getParameter("page")
+						+ "&perPageNum=" + request.getParameter("perPageNum")
+						;
+			}
+			break;
+			
+		case "/message/delete.do":
+			// 데이터 수집 - 글번호, 비밀번호
+			String deleteNoStr = request.getParameter("no");
+			long deleteNo = Long.parseLong(deleteNoStr);
+			MessageVO deleteVO = new MessageVO();
+			deleteVO.setNo(deleteNo);
+			// DB 삭제 처리해 보자.
+			Execute.run(messageDeleteService, deleteVO);
+			jsp = "redirect:list.do?perPageNum=" 
+					+ request.getParameter("perPageNum");
+			break;
+			
+		default:
+			throw new Exception("잘못된 페이지를 요청하셨습니다.");
+		}
+		return jsp;
+	}
+	
+}

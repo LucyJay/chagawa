@@ -1,0 +1,112 @@
+package com.chagawa.epilogue.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.epilogue.vo.EpilogueVO;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+
+public class EpilogueController {
+
+	// epilogueService 변수선언.
+	@SuppressWarnings("unused") // 경고표시이이이이 지우기
+	private ServiceInterface epilogueListService;
+	
+	private ServiceInterface epilogueViewService;
+	
+	@SuppressWarnings("unused") // 경고표시이이이이 지우기
+	private ServiceInterface epilogueWriteService;
+	
+	@SuppressWarnings("unused") // 경고표시이이이이 지우기
+	private ServiceInterface epilogueUpdateService;
+	
+	@SuppressWarnings("unused") // 경고표시이이이이 지우기
+	private ServiceInterface epilogueDeleteService;
+	
+	// setter 생성해서 service받기
+	public void setEpilogueListService(ServiceInterface epilogueListService) {
+		this.epilogueListService = epilogueListService;
+	}
+	public void setEpilogueViewService(ServiceInterface epilogueViewService) {
+		this.epilogueViewService = epilogueViewService;
+	}
+	public void setEpilogueWriteService(ServiceInterface epilogueWriteService) {
+		this.epilogueWriteService = epilogueWriteService;
+	}
+	public void setEpilogueUpdateService(ServiceInterface epilogueUpdateService) {
+		this.epilogueUpdateService = epilogueUpdateService;
+	}
+	public void setEpilogueDeleteService(ServiceInterface epilogueDeleteService) {
+		this.epilogueDeleteService = epilogueDeleteService;
+	}
+	
+	// 실행 메서드
+	public String execute(HttpServletRequest request) throws Exception{
+		System.out.println("EpilogueController.execute().request : " + request);
+		
+		// 요청
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("EpilogueController.execute().method : " + method);
+		String jsp = null;
+		
+		// 처리
+		switch (uri) {
+		// List
+		case "/epilogue/list.do":
+			
+//			// 페이지 정보와 검색 정보 받는 메서드 호출
+//			PageObject pageObject = PageObject.getInstance(request);
+//			// 리스트 -> request에 담는다.
+//			request.setAttribute("list", Execute.run(epilogueListService, pageObject));
+//			// jsp - 리스트 데이터 아래의 페이지 네비게이션을 위한 데이터 저장
+//			request.setAttribute("pageObject", pageObject);
+//			jsp = "board/list";
+			
+			break;
+			
+		// View
+		case "/epilogue/view.do":
+			
+			// 데이터 수집
+			String noStr = request.getParameter("no");
+			long no = Long.parseLong(noStr);
+			String incStr = request.getParameter("inc");
+			int inc = Integer.parseInt(incStr);
+			// request에 데이터 담기
+			EpilogueVO viewVO 
+			= (EpilogueVO) Execute.run(epilogueViewService, new Object[] {no,inc});
+			// 내용 줄바꿈 처리
+			viewVO.setContent(viewVO.getContent().replace("\n", "<br/>"));
+			request.setAttribute("vo", viewVO);
+			jsp = "board/view";
+			
+			break;
+			
+		//	Write
+		case "/epilogue/write.do":
+			
+			break;
+			
+		// Update	
+		case "/epilogue/update.do":
+			
+			break;
+			
+		// Delete
+		case "/epilogue/delete.do":
+			
+			break;
+
+		default:
+			
+			jsp = "redirect:/error/404.do";
+			request.getSession().setAttribute("uri", uri);
+			
+		} // end of switch ~ case
+		
+		return jsp;
+		
+	} // end of execute()
+	
+} // end of EpilogueController class

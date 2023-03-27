@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>카풀 등록</title>
+</head>
+<body>
+<form method="post">
+<input type="hidden" name="id" value="${login.id }">
+		<label for="startRegion">출발</label> <select name="startRegion"
+			required="required">
+			<option>서울</option>
+			<option>서울 도봉구</option>
+			<option>경기</option>
+			<option>경기 의정부시</option>
+		</select>
+		<input name="startAddress" required="required">
+		<label for="arriveRegion">도착</label> <select name="arriveRegion"
+			required="required">
+			<option>서울</option>
+			<option>경기</option>
+			<option>경기 의정부시</option>
+		</select>
+		<input name="arriveAddress" required="required">
+		<label for="startTimePre">출발예정시각</label>
+		<input name="startTimePre" type="datetime-local">
+		<label for="arriveTimePre">도착예정시각</label>
+		<input name="arriveTimePre" type="datetime-local">
+		<label for="price">동승료</label>
+		<input name="price" type="number">
+		차종 : ${login.carModel }
+		<label for="seats">최대동승인원</label>
+		<input name="seats" type="number">
+		<textarea name="memo" placeholder=""></textarea>
+		
+		<button>카풀 등록하기</button>
+		<button>이전으로</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,138 @@
+package com.chagawa.carpool.vo;
+
+public class PassengerVO {
+
+	private Long cpNo;
+	private String id, nickname, profileImage, msg, appTime, status;
+	private Integer fixed, gotIn, arrived, reviewed, star, psgCount, starCount;
+	private Double starAvg;
+
+	public Long getCpNo() {
+		return cpNo;
+	}
+
+	public void setCpNo(Long cpNo) {
+		this.cpNo = cpNo;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public String getAppTime() {
+		return appTime;
+	}
+
+	public void setAppTime(String appTime) {
+		this.appTime = appTime;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Integer getFixed() {
+		return fixed;
+	}
+
+	public void setFixed(Integer fixed) {
+		this.fixed = fixed;
+	}
+
+	public Integer getGotIn() {
+		return gotIn;
+	}
+
+	public void setGotIn(Integer gotIn) {
+		this.gotIn = gotIn;
+	}
+
+	public Integer getArrived() {
+		return arrived;
+	}
+
+	public void setArrived(Integer arrived) {
+		this.arrived = arrived;
+	}
+
+	public Integer getReviewed() {
+		return reviewed;
+	}
+
+	public void setReviewed(Integer reviewed) {
+		this.reviewed = reviewed;
+	}
+
+	public Integer getStar() {
+		return star;
+	}
+
+	public void setStar(Integer star) {
+		this.star = star;
+	}
+
+	public Integer getPsgCount() {
+		return psgCount;
+	}
+
+	public void setPsgCount(Integer psgCount) {
+		this.psgCount = psgCount;
+	}
+
+	public Integer getStarCount() {
+		return starCount;
+	}
+
+	public void setStarCount(Integer starCount) {
+		this.starCount = starCount;
+	}
+
+	public Double getStarAvg() {
+		return starAvg;
+	}
+
+	public void setStarAvg(Double starAvg) {
+		this.starAvg = starAvg;
+	}
+
+	@Override
+	public String toString() {
+		return "PassengerVO [cpNo=" + cpNo + ", id=" + id + ", nickname=" + nickname + ", profileImage=" + profileImage + ", msg=" + msg + ", appTime="
+				+ appTime + ", status=" + status + ", fixed=" + fixed + ", gotIn=" + gotIn + ", arrived=" + arrived
+				+ ", reviewed=" + reviewed+ ", star=" + star + ", psgCount=" + psgCount + ", starCount=" + starCount + ", starAvg="
+				+ starAvg + "]";
+	}
+
+}

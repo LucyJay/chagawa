@@ -1,0 +1,84 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>이용 중인 카풀</h1>
+	<p>카풀 정보 - 상태 : ${vo.status }</p>
+	번호 : ${vo.no } | ${vo.startRegion } / ${vo.startAddress } ->
+	${vo.arriveRegion } / ${vo.arriveAddress }
+	<br>예정운행시간 : ${vo.startTimePre } 출발 / ${vo.arriveTimePre } 도착
+	<br>출발시간 : ${vo.startTimePre } 출발 / ${vo.arriveTimePre } 도착
+	<br>동승료 ${vo.price } 포인트
+	<c:if test="${pstatus ne null}">
+		<p>
+			드라이버 정보<br> 닉네임: ${vo.nickname }
+			<button>메시지 보내기</button>
+		</p>
+	</c:if>
+
+	<p>동승확정자 탑승정보 출력</p>
+	<p>
+		동승자 정보
+
+		<c:if test="${vo.status eq '출발대기'}">
+		 - ${vo.psgGotCount} / ${vo.psgFixCount } <br>
+			<c:forEach items="${list }" var="pvo">
+		닉네임: ${pvo.nickname } |
+		
+<!-- 		출발대기 상태일 경우 : 확정인원 리스트, 탑승 관련 버튼 -->
+				<c:if test="${pvo.status eq '확정' }">
+					<c:if test="${pvo.id eq login.id }">
+						<a href="getin.do?cpNo=${vo.no }">탑승하기</a>
+					</c:if>
+					<c:if test="${pvo.id ne login.id }"> -탑승대기- </c:if>
+				</c:if>
+				<c:if test="${pvo.status eq '탑승' }"> -탑승완료- </c:if>
+				<br>
+			</c:forEach>
+		</c:if>
+
+		<!-- 		운행중, 도착인 경우 : 탑승자 리스트 / 도착에는 도착 버튼  -->
+		<c:if test="${vo.status ne '출발대기'}">
+			<c:forEach items="${gotInList }" var="gvo">
+		닉네임: ${gvo.nickname } |
+		<c:if test="${vo.status eq '도착' }">
+					<c:if test="${gvo.id eq login.id }">
+						<a href="finish.do?cpNo=${vo.no }">도착확인</a>
+					</c:if>
+					<c:if test="${gvo.id ne login.id }"> -도착확인대기- </c:if>
+				</c:if>
+				<br>
+			</c:forEach>
+		</c:if>
+	</p>
+
+
+	<c:if test="${pstatus eq null}">
+	드라이버인 경우<br>
+		<c:if test="${vo.status eq '출발대기' }">
+			<p>상태가 출발대기일 경우</p>
+			<a href="start.do?cpNo=${vo.no }">출발하기</a>
+			<a href="cancel.do?cpNo=${vo.no }">운행취소</a>
+		</c:if>
+
+		<c:if test="${vo.status eq '운행중'}">
+			<p>상태가 운행중일 경우</p>
+	출발시간 : ${vo.startTime }
+			<a href="arrive.do?cpNo=${vo.no }">도착하기</a>
+		</c:if>
+	</c:if>
+
+	<c:if test="${vo.status }=='도착'">
+		<p>상태가 도착일 경우</p>
+	출발시간 : ${vo.startTime }
+	도착시간 : ${vo.arriveTime }
+	</c:if>
+
+</body>
+</html>

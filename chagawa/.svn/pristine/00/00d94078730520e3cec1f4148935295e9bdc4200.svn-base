@@ -1,0 +1,132 @@
+package com.chagawa.point.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.MemberVO;
+import com.chagawa.point.vo.PointVO;
+
+public class PointController {
+
+	private ServiceInterface pointListService;
+	private ServiceInterface pointUpdateService;
+	private ServiceInterface pointWriteService;
+	private ServiceInterface memberMyPagePService;
+
+	public void setPointListService(ServiceInterface pointListService) {
+		this.pointListService = pointListService;
+	}
+
+	public void setPointUpdateService(ServiceInterface pointUpdateService) {
+		this.pointUpdateService = pointUpdateService;
+	}
+
+	public void setPointWriteService(ServiceInterface pointWriteService) {
+		this.pointWriteService = pointWriteService;
+	}
+
+	public void setMemberMyPagePService(ServiceInterface memberMyPagePService) {
+		this.memberMyPagePService = memberMyPagePService;
+	}
+
+	public String execute(HttpServletRequest request) throws Exception {
+		System.out.println("PointController.execute().request - " + request);
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("PointController.execute().method - " + method);
+		String jsp = null;
+
+		switch (uri) {
+
+		case "/point/list.do":
+			String id = request.getParameter("id");
+			request.setAttribute("list", Execute.run(pointListService, id));
+			MemberVO memberVO2 = (MemberVO) Execute.run(memberMyPagePService, id);
+			Long myPoint2 = memberVO2.getMyPoint();
+			request.setAttribute("point", myPoint2);
+			jsp = "point/list";
+			break;
+
+		case "/point/charge.sub":
+			id = request.getParameter("id");
+			if (request.getMethod().equals("GET")) {
+				request.setAttribute("vo", Execute.run(pointListService, id));
+				jsp = "point/charge";
+			} else {
+				// 포인트 증가
+				PointVO updateVO = new PointVO();
+				updateVO.setId(id);
+				updateVO.setPrice(Long.parseLong(request.getParameter("point")));
+				Execute.run(pointUpdateService, updateVO);
+
+				// 포인트 증가 후 내역 등록
+				PointVO writeVO = new PointVO();
+				writeVO.setId(id);
+				writeVO.setMemo(request.getParameter("memo") + " 충전");
+				writeVO.setPrice(Long.parseLong(request.getParameter("point")));
+				Execute.run(pointWriteService, writeVO);
+
+				// 관리자 운영 수익 증가
+				PointVO updateVOadmin = new PointVO();
+				updateVOadmin.setId("admin");
+				updateVOadmin.setPrice(Long.parseLong(request.getParameter("point")));
+				Execute.run(pointUpdateService, updateVOadmin);
+				
+				// 관리자 운영 수익 증가 후 내역 등록
+				PointVO writeVOadmin = new PointVO();
+				writeVOadmin.setId("admin");
+				writeVOadmin.setMemo(request.getParameter("memo") + " 충전 수수료");
+				writeVOadmin.setPrice(Long.parseLong(request.getParameter("point")) * 2 / 10);
+				Execute.run(pointWriteService, writeVOadmin);
+
+				jsp = "redirect:charge.sub?id=" + id;
+
+			}
+			break;
+
+		case "/point/withdraw.sub":
+			id = request.getParameter("id");
+			if (request.getMethod().equals("GET")) {
+				MemberVO memberVO3 = (MemberVO) Execute.run(memberMyPagePService, id);
+				request.setAttribute("bank", memberVO3.getBank());
+				request.setAttribute("account", memberVO3.getAccount());
+				request.setAttribute("vo", Execute.run(pointListService, id));
+				jsp = "point/withdraw";
+			} else {
+				PointVO updateVO = new PointVO();
+				updateVO.setId(id);
+				Long withdrawPoint = Long.parseLong(request.getParameter("point"));
+				updateVO.setPrice(-withdrawPoint);
+				MemberVO memberVO = (MemberVO) Execute.run(memberMyPagePService, id);
+				Long myPoint = memberVO.getMyPoint();
+
+				if (myPoint > withdrawPoint) {
+
+					// 포인트 차감
+					Execute.run(pointUpdateService, updateVO);
+
+					// 포인트 차감 후 내역 등록
+					PointVO writeVO = new PointVO();
+					writeVO.setId(id);
+					writeVO.setMemo(request.getParameter("memo"));
+					writeVO.setPrice(-(Long.parseLong(request.getParameter("point"))));
+					Execute.run(pointWriteService, writeVO);
+
+					jsp = "redirect:withdraw.sub?id=" + id;
+				} else {
+					// myPoint < withdrawPoint 경우 메시지
+					request.setAttribute("fail", 1);
+					jsp = "point/withdraw";
+				}
+			}
+			break;
+
+		default:
+
+		}
+
+		return jsp;
+	}
+
+}

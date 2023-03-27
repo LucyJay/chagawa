@@ -1,0 +1,221 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내정보수정</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#tel_2").val(($("#tel").val()).substring(4,8));
+	$("#tel_3").val(($("#tel").val()).substring(9,13));
+	
+	$("#checkNickname").click(function() {
+		if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+		window.open("checkNickname.sub?nickname=" + $("#nickname").val(), "checkNickname", "width= 1000, height= 300, top= 200, left= 250");
+	});
+	$("#checkTel").click(function() {
+		if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+		if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+		window.open("checkTel.sub?tel_1="+$("#tel_1").val()+"&tel_2="+$("#tel_2").val()+"&tel_3="+$("#tel_3").val(), "checkTel", "width= 1000, height= 300, top= 200, left= 250");
+	});
+	$("#checkCar").click(function() {
+		if (!checkData(reg_carNo, $("#carNo"), reg_carNo_error_msg, 1)) return false;
+		window.open("checkCar.sub?carNo=" + $("#carNo").val(), "checkCar", "width= 1000, height= 300, top= 200, left= 450");
+	});
+	
+	$("#tel_2").on("keyup", function() {
+		if(this.value.length == 4) {
+			$("#tel_3").focus();
+		}
+	});
+	
+	$("#updateForm").submit(function() {
+		if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+		if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+		if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+		if($("#bank").val() == "-은행-"){
+			alert("은행을 선택해주세요.");
+			return false;
+		}
+		if (!checkData(reg_account, $("#account"), reg_account_error_msg, 1)) return false;
+		if (!checkData(reg_carModel, $("#carModel"), reg_carModel_error_msg, 1)) return false;
+		if (!checkData(reg_carNo, $("#carNo"), reg_carNo_error_msg, 1)) return false;
+	});
+	
+	$("#cancelBtn").click(function() {
+		history.back();
+	});
+});
+</script>
+
+<style type="text/css">
+h2{
+	color: #4B89DC;
+	font-weight: bold;
+	text-align: center;
+}
+div{
+	margin: 5px auto;
+}
+.col-md-3 {
+	text-align: right;
+	vertical-align: middle;
+	padding-top: 5px;
+}
+#tel_2, #tel_3{
+	width: 100px;
+}
+#checkTel, #checkCar, #checkNickname{
+	margin: auto 5px;;
+}
+</style>
+
+</head>
+<body>
+<div class="container">
+	<div style="width: 70%">
+		<h2>내 정보 수정</h2>
+		<br>
+		<form action="update.do" method="post" id="updateForm" class="form-group well">
+			<div class="row">
+				<div class="col-md-3">
+					<label for="id">아이디:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="id" id="id" value="${vo.id}" readonly="readonly">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="nickname">닉네임:</label>
+				</div>
+				<div class="col-md-7 form-inline">
+					<input class="form-control" name="nickname" id="nickname" value="${vo.nickname}">
+					<button class="btn btn-success btn-sm" type="button" id="checkNickname">중복확인</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="name">이름:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="name" id="name" value="${vo.name}" readonly="readonly">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="gender">성별:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="gender" id="gender" value="${vo.gender}" readonly="readonly">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="birth">생년월일:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="birth" id="birth" value="${vo.birth}" readonly="readonly">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<input name="tel" id="tel" value="${vo.tel}" type="hidden">
+					<label for="tel_1">연락처:</label>
+				</div>
+				<div class="col-md-7 form-inline">
+					<select class="form-control" name="tel_1" id="tel_1" style="width: 80px;">
+						<option>010</option>
+						<option>011</option>
+						<option>012</option>
+						<option>013</option>
+						<option>014</option>
+						<option>015</option>
+						<option>016</option>
+						<option>017</option>
+						<option>018</option>
+						<option>019</option>
+					</select>
+					<input class="form-control" name="tel_2" id="tel_2">
+					<input class="form-control" name="tel_3" id="tel_3">
+					<button class="btn btn-success btn-sm" type="button" id="checkTel">중복확인</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="bank">계좌:</label>
+				</div>
+				<div class="col-md-7 form-inline">
+					<select class="form-control" name="bank" id="bank">
+						<option <c:if test="${vo.bank eq '신한'}">selected</c:if>>신한</option>
+						<option <c:if test="${vo.bank eq '국민'}">selected</c:if>>국민</option>
+						<option <c:if test="${vo.bank eq '우리'}">selected</c:if>>우리</option>
+						<option <c:if test="${vo.bank eq '농협'}">selected</c:if>>농협</option>
+						<option <c:if test="${vo.bank eq '하나'}">selected</c:if>>하나</option>
+						<option <c:if test="${vo.bank eq '카카오'}">selected</c:if>>카카오</option>
+						<option <c:if test="${vo.bank eq '새마을'}">selected</c:if>>새마을</option>
+						<option <c:if test="${vo.bank eq '우체국'}">selected</c:if>>우체국</option>
+					</select>
+					<input class="form-control" name="account" id="account" value="${vo.account}">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="gradeName">등급:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="gradeName" id="gradeName" value="${vo.gradeName}" readonly="readonly">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<label for="regDate">가입일:</label>
+				</div>
+				<div class="col-md-7">
+					<input class="form-control" name="regDate" id="regDate" value="${vo.regDate}" readonly="readonly">
+				</div>
+			</div>
+			<c:if test="${vo.gradeNo == 2}">
+				<div class="row">
+					<div class="col-md-3">
+						<label for="carModel">차종:</label>
+					</div>
+					<div class="col-md-7">
+						<input class="form-control" name="carModel" id="carModel" value="${vo.carModel}" style="width: 250px;">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<label for="carNo">차량번호:</label>
+					</div>
+					<div class="col-md-7 form-inline">
+						<input class="form-control" name="carNo" id="carNo" value="${vo.carNo}">
+						<button class="btn btn-success btn-sm" type="button" id="checkCar">중복확인</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<label for="licenseNo">면허번호:</label>
+					</div>
+					<div class="col-md-7">
+						<input class="form-control" name="licenseNo" id="licenseNo" value="${vo.licenseNo}" readonly="readonly">
+					</div>
+				</div>
+			</c:if>
+			<div class="pull-right" style="padding: 10px 0;">
+				<br>
+				<button class="btn btn-default">수정</button>
+				<button class="btn btn-default" type="reset">새로입력</button>
+				<button class="btn btn-default" type="button" id="cancelBtn">취소</button>
+			</div>
+		</form>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,123 @@
+package com.chagawa.carpool.controller;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.carpool.vo.CarpoolVO;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.webjjang.util.PageObject;
+
+public class CarpoolController {
+
+	private ServiceInterface carpoolListService;
+	private ServiceInterface carpoolMyDriveListService;
+	private ServiceInterface carpoolMyPsgListService;
+	private ServiceInterface carpoolNowService;
+	private ServiceInterface carpoolViewService;
+	private ServiceInterface carpoolWriteService;
+	private ServiceInterface carpoolApplyService;
+	private ServiceInterface carpoolFixService;
+	private ServiceInterface carpoolStopApplyService;
+	private ServiceInterface carpoolGetInService;
+	private ServiceInterface carpoolStartService;
+	private ServiceInterface carpoolArriveService;
+	private ServiceInterface carpoolArriveCheckService;
+	private ServiceInterface carpoolCancelService;
+
+	public void setCarpoolListService(ServiceInterface carpoolListService) {
+		this.carpoolListService = carpoolListService;
+	}
+
+	public void setCarpoolMyDriveListService(ServiceInterface carpoolMyDriveListService) {
+		this.carpoolMyDriveListService = carpoolMyDriveListService;
+	}
+
+	public void setCarpoolMyPsgListService(ServiceInterface carpoolMyPsgListService) {
+		this.carpoolMyPsgListService = carpoolMyPsgListService;
+	}
+
+	public void setCarpoolNowService(ServiceInterface carpoolNowService) {
+		this.carpoolNowService = carpoolNowService;
+	}
+
+	public void setCarpoolViewService(ServiceInterface carpoolViewService) {
+		this.carpoolViewService = carpoolViewService;
+	}
+
+	public void setCarpoolWriteService(ServiceInterface carpoolWriteService) {
+		this.carpoolWriteService = carpoolWriteService;
+	}
+
+	public void setCarpoolApplyService(ServiceInterface carpoolApplyService) {
+		this.carpoolApplyService = carpoolApplyService;
+	}
+
+	public void setCarpoolFixService(ServiceInterface carpoolFixService) {
+		this.carpoolFixService = carpoolFixService;
+	}
+
+	public void setCarpoolStopApplyService(ServiceInterface carpoolStopApplyService) {
+		this.carpoolStopApplyService = carpoolStopApplyService;
+	}
+
+	public void setCarpoolGetInService(ServiceInterface carpoolGetInService) {
+		this.carpoolGetInService = carpoolGetInService;
+	}
+
+	public void setCarpoolStartService(ServiceInterface carpoolStartService) {
+		this.carpoolStartService = carpoolStartService;
+	}
+
+	public void setCarpoolArriveService(ServiceInterface carpoolArriveService) {
+		this.carpoolArriveService = carpoolArriveService;
+	}
+
+	public void setCarpoolArriveCheckService(ServiceInterface carpoolArriveCheckService) {
+		this.carpoolArriveCheckService = carpoolArriveCheckService;
+	}
+
+	public void setCarpoolCancelService(ServiceInterface carpoolCancelService) {
+		this.carpoolCancelService = carpoolCancelService;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String execute(HttpServletRequest request) throws Exception {
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("CarpoolController.execute() - uri: " + uri + " | method: " + method);
+		String jsp = null;
+		switch (uri) {
+		case "/carpool/list.do":
+			String startRegion = request.getParameter("startRegion");
+			if (startRegion != null) {
+				String arriveRegion = request.getParameter("arriveRegion");
+				PageObject pageObject = PageObject.getInstance(request);
+				CarpoolVO listVO = new CarpoolVO();
+				listVO.setStartRegion(startRegion);
+				listVO.setArriveRegion(arriveRegion);
+				request.setAttribute("list",
+						(List<CarpoolVO>) Execute.run(carpoolListService, new Object[] { listVO, pageObject }));
+				request.setAttribute("pageObject", pageObject);
+			}
+			jsp = "carpool/list";
+			break;
+		case "/carpool/view.do":
+			break;
+		case "/carpool/write.do":
+			break;
+		case "/carpool/now.do":
+			break;
+		case "/carpool/mylist.do":
+			break;
+		default:
+			jsp = "redirect:/error/404.do";
+		}
+		return jsp;
+	}
+
+//	private ServiceInterface carpoolReviewedService; //후기 기능
+//	private ServiceInterface carpoolUnreviewedService; // 후기 기능
+
+}

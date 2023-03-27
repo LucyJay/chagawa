@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>포인트 인출</title>
+
+<!-- 라이브러리 등록 - CDN 방식 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#withdrawBtn").click(
+				function() {
+					var pointInput = document.getElementById("point");
+					var point = pointInput.value;
+					var confirmationMessage = "${account}(${bank}) 계좌로 "
+							+ point + "원을 송금하시겠습니까?";
+					if (point === "") {
+						alert("금액을 입력해 주세요.");
+						return false;
+					} else if (confirm(confirmationMessage)) {
+						return true;
+					}
+					return false;
+				});
+	});
+</script>
+
+<style type="text/css">
+h2 {
+	color: #4B89DC;
+	font-weight: bold;
+	text-align: center;
+}
+</style>
+</head>
+
+<body>
+	<div class="container text-center">
+		<h2 style="text-align: center;">포인트 인출</h2><br>
+		<form method="post" action="withdraw.sub">
+			<div class="well">
+				<input type="hidden" name="id" value="${login.id }">
+				<input type="hidden" name="memo" value="포인트 인출">
+				<label>보유 포인트:&nbsp;&nbsp;</label>${myPoint }<br>
+				<label>나의 계좌:&nbsp;&nbsp;</label>${account } (${bank })&nbsp;&nbsp;&nbsp;
+				<a href="/member/update.do?id=${login.id }" target="_blank" class="btn btn-default" onclick="javascript:window.close();">계좌 변경</a><br><br><br>
+				<label>인출 포인트:&nbsp;</label>
+				<input required="required" type="text" id="point" name="point" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+			</div><br>
+
+			<div style="display: flex; flex-direction: column; height: 100%;">
+				<button class="btn btn-primary" style="flex: 1; margin-bottom: 10px;" id="withdrawBtn">인출하기</button>
+				<button class="btn btn-default" style="flex: 1;" onclick="window.close()" onclick="window.close()">닫기</button>
+			</div>
+			
+			<c:if test="${fail==1 }">
+				<script type="text/javascript">
+					alert('보유 포인트가 부족합니다.')
+				</script>
+			</c:if>
+		</form>
+	</div>
+</body>
+</html>

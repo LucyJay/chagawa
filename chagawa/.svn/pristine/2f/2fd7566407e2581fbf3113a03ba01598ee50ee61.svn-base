@@ -1,0 +1,129 @@
+package com.chagawa.notice.controller;
+
+import java.net.URLEncoder;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.notice.vo.NoticeVO;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.chagawa.main.Execute;
+import com.webjjang.util.PageObject;
+
+public class NoticeController {
+
+	private ServiceInterface noticeListService;
+	private ServiceInterface noticeViewService;
+	private ServiceInterface noticeWriteService;
+	private ServiceInterface noticeUpdateService;
+	private ServiceInterface noticeDeleteService;
+
+	public void setNoticeListService(ServiceInterface noticeListService) {
+		this.noticeListService = noticeListService;
+	}
+
+	public void setNoticeViewService(ServiceInterface noticeViewService) {
+		this.noticeViewService = noticeViewService;
+	}
+
+	public void setNoticeWriteService(ServiceInterface noticeWriteService) {
+		this.noticeWriteService = noticeWriteService;
+	}
+
+	public void setNoticeUpdateService(ServiceInterface noticeUpdateService) {
+		this.noticeUpdateService = noticeUpdateService;
+	}
+
+	public void setNoticeDeleteService(ServiceInterface noticeDeleteService) {
+		this.noticeDeleteService = noticeDeleteService;
+	}
+
+	public String execute(HttpServletRequest request) throws Exception {
+		System.out.println("NoticeController.execute().request - " + request);
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("NoticeController.execute().method - " + method);
+
+		String path = "/upload/notice";
+		String realPath = request.getServletContext().getRealPath(path);
+		int size = 100 * 1024 * 1024;
+		String jsp = null;
+
+		switch (uri) {
+
+		case "/notice/list.do":
+			PageObject pageObject = PageObject.getInstance(request);
+			request.setAttribute("list", Execute.run(noticeListService, pageObject));
+			request.setAttribute("pageObject", pageObject);
+			jsp = "notice/list";
+			break;
+
+		case "/notice/view.do":
+			String noStr = request.getParameter("no");
+			long no = Long.parseLong(noStr);
+			NoticeVO viewVO = (NoticeVO) Execute.run(noticeViewService, no);
+			viewVO.setContent(viewVO.getContent().replace("\n", "<br/>"));
+			request.setAttribute("vo", viewVO);
+			jsp = "notice/view";
+			break;
+
+		case "/notice/write.do":
+			if (request.getMethod().equals("GET")) {
+				jsp = "notice/write";
+			} else {
+				MultipartRequest multi = new MultipartRequest(request, realPath, size, "utf-8",
+						new DefaultFileRenamePolicy());
+
+				NoticeVO writeVO = new NoticeVO();
+				writeVO.setTitle(multi.getParameter("title"));
+				writeVO.setContent(multi.getParameter("content"));
+				writeVO.setStartDate(multi.getParameter("startDate"));
+				writeVO.setEndDate(multi.getParameter("endDate"));
+				writeVO.setGnrFile(path + "/" + multi.getFilesystemName("gnrFile"));
+				writeVO.setImgFile(path + "/" + multi.getFilesystemName("imgFile"));
+				Execute.run(noticeWriteService, writeVO);
+				System.out.println(request.getParameter("perPageNum"));
+				jsp = "redirect:list.do?perPageNum=" + multi.getParameter("perPageNum");
+			}
+			break;
+
+		case "/notice/update.do":
+			noStr = request.getParameter("no");
+			no = Long.parseLong(noStr);
+			if (request.getMethod().equals("GET")) {
+				request.setAttribute("vo", Execute.run(noticeViewService, no));
+				jsp = "notice/update";
+			} else {
+				NoticeVO updateVO = new NoticeVO();
+				updateVO.setNo(no);
+				updateVO.setTitle(request.getParameter("title"));
+				updateVO.setContent(request.getParameter("content"));
+				updateVO.setStartDate(request.getParameter("startDate"));
+				updateVO.setEndDate(request.getParameter("endDate"));
+				updateVO.setGnrFile(request.getParameter("gnrFile"));
+				updateVO.setImgFile(request.getParameter("imgFile"));
+				Execute.run(noticeUpdateService, updateVO);
+				jsp = "redirect:view.do?no=" + no + "&page=" + request.getParameter("page") + "&perPageNum="
+						+ request.getParameter("perPageNum") + "&key=" + request.getParameter("key") + "&word="
+						+ URLEncoder.encode(request.getParameter("word"), "utf-8");
+			}
+			break;
+
+		case "/notice/delete.do":
+			noStr = request.getParameter("no");
+			no = Long.parseLong(noStr);
+			NoticeVO deleteVO = new NoticeVO();
+			deleteVO.setNo(no);
+			Execute.run(noticeDeleteService, deleteVO);
+			jsp = "redirect:list.do?perPageNum=" + request.getParameter("perPageNum");
+			break;
+
+		default:
+			throw new Exception("잘못된 페이지를 요청하셨습니다.");
+		}
+		return jsp;
+
+	}
+
+}

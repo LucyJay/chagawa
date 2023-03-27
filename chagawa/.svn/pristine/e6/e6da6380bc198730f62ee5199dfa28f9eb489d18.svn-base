@@ -1,0 +1,92 @@
+/**
+ * 정규 표현식
+ */
+
+// 아이디: 첫 글자는 영문자, 4~20자 영문자와 숫자
+const reg_id = /^[a-zA-Z][a-zA-Z0-9]{3,19}$/;
+const reg_id_error_msg = "Id는 4~20자, 영문자와 숫자로만 작성하고 영문자로 시작해야 합니다.";
+
+// 비밀번호: 글자이면서 4자이상 20자 이내
+const reg_pw = /^.{4,20}$/;
+const reg_pw_error_msg = "비밀번호는 4~20자로 작성해야 합니다.";
+
+// 이름: 한글 2~10자리
+const reg_name = /^[가-힣]{2,10}$/;
+const reg_name_error_msg = "이름은 2~10자, 한글로만 작성해야 합니다.";
+
+// 닉네임
+const reg_nickname = /^[가-힣a-zA-Z][가-힣a-zA-Z0-9]{1,9}$/;
+//const reg_nickname = /^[가-힣a-zA-Z]{1,9}$/;
+const reg_nickname_error_msg = "닉네임은 2~10자로 작성하고 영문자나 한글로 시작해야 합니다.";
+
+// 년도는 앞에 19xx, 20xx로 입력, 월 : 01~12, 일 : 01~31
+const reg_dateY = /^(19|20)\d{2}$/;
+const reg_dateY_error_msg = "연도(year)는 네자리 모두 입력하셔야 합니다.";
+const reg_dateD = /^(0[1-9]|[12][0-9]|3[01])$/;
+const reg_dateD_error_msg = "일(date)는 두자리로 입력하셔야 합니다.";
+
+// 연락처: 01x(숫자) - xxx|xxxx(숫자) - xxxx(숫자)
+const reg_tel1 = /^[0-9]{3,4}$/;
+const reg_tel1_error_msg = "전화번호는 숫자로만 작성해야 하고 첫번째 공백은 [xxx] 또는 [xxxx] 패턴으로 입력해야 합니다.";
+const reg_tel2 = /^[0-9]{4}$/;
+const reg_tel2_error_msg = "전화번호는 숫자로만 작성해야 하고 두번째 공백은 [xxxx] 패턴으로 입력해야 합니다.";
+
+// 계좌
+const reg_account = /^[0-9]{1,7}-[0-9]{1,7}-[0-9]{1,7}$/;
+const reg_account_error_msg = "계좌번호는 [-]를 포함하여 정확히 입력해 주세요.";
+
+// 차종
+const reg_carModel = /^[가-힣a-zA-Z]{1,20}$/;
+const reg_carModel_error_msg = "차종은 한글, 영문으로 20자 이내로 입력해 주세요.";
+
+// 차량번호
+const reg_carNo = /^[0-9]{2,3}[가-힣]{1}[0-9]{4}$/;
+const reg_carNo_error_msg = "차량번호는 띄어쓰기 없이 [xx가xxxx] 또는 [xxx가xxxx] 패턴으로 입력해야 합니다.";
+
+// 면허번호
+const reg_licenseNo = /^[0-9]{2}-[0-9]{2}-[0-9]{6}-[0-9]{2}$/;
+const reg_licenseNo_error_msg = "면허번호는 [xx-xx-xxxxxx-xx] 패턴으로 입력해야 합니다.";
+
+
+// const - 상수 변수 선언
+// 숫자(\d)만 1개 이상 계속 반복되는 데이터 패턴
+const reg_digit = /^\d+$/;
+const reg_digit_error_msg = "숫자만 입력하셔야 합니다.";
+
+// 제목 - 4~100자 이내, 공백 제거
+const reg_title = /^.{4,100}$/;
+const reg_title_error_msg = "제목은 4~100자 이내로 작성하셔야 합니다."
+
+// 내용 - 4~670자 이내, 공백 제거
+const reg_content = /^(.|\n){4,670}$/;
+const reg_content_error_msg = "내용은 4~670자 이내로 작성하셔야 합니다.";
+
+// 정규표현식 검사 함수-------------------------------------------------------------------------
+
+// test(위에 정규표현식 변수, 검사한 문자열, 위에 오류인 경우 경고창 내용)
+function test(reg, str, err_msg) {
+	// 패턴에 맞지 않는 경우의 처리
+	if (!reg.test(str)) {
+		// 에러 경고창 띄우기
+		alert(err_msg);
+		// 호출한 쪽에 오류라고 false를 리턴해 준다.
+		return false;
+	}
+	// 오류가 없는 경우 true를 리턴해 준다.(안 해주면 false와 같이 동작)
+	return true;
+}
+
+// 데이터 유효성 검사하는 함수 - input, textarea
+// isTrim - 1. trim() 처리한다. 0. trim() 처리하지 않는다.
+function checkData(reg, obj, reg_err_msg, isTrim) {
+	if (isTrim) {
+		obj.val(obj.val().trim());
+	}
+	// 잘못된 데이터 처리
+	if (!test(reg, obj.val(), reg_err_msg)) {
+		obj.focus();
+		return false;
+	}
+	// 적당한 데이터
+	return true;
+}

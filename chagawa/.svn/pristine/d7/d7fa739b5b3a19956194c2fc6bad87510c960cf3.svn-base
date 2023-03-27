@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>카풀 상세보기(드라이버용)</h1>
+	<p>카풀 정보 출력하고</p>
+	<p>동승신청자, 동승확정자 정보 출력</p>
+	
+	<a href="fix.do">태우기</a>
+	<a href="stopapply.do">마감하기</a>
+	<a href="cancel.do">운행취소</a>
+	
+	<p>드라이버에게 문의하고 싶은 내용이 있나요?</p>
+	<button>메시지 보내기</button>
+
+</body>
+</html>

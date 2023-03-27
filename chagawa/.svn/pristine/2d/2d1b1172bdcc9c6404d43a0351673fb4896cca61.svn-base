@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#useBtn").click(function() {
+		opener.parent.location = "join.do?id="+$("#id").val();
+		window.close();
+	});
+});
+</script>
+
+</head>
+<body>
+<div class="container">
+	<p style="color: orange">사용가능한 아이디 입니다.</p>
+	<div class="form-group form-inline">
+		<label for="id">아이디:</label>
+		<input name="id" id="id" class="form-control" readonly="readonly" value="${param.id}">
+	</div>
+	<button class="btn btn-default" id="useBtn">사용하기</button>
+</div>
+</body>
+</html>

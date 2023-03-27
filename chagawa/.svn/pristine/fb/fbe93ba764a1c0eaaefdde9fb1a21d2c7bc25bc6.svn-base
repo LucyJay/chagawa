@@ -1,0 +1,317 @@
+package com.chagawa.member.controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.member.vo.MemberVO;
+
+public class MemberController {
+	
+	private ServiceInterface memberLoginService;
+	private ServiceInterface memberJoinService;
+	private ServiceInterface memberCheckIdService;
+	private ServiceInterface memberMyPageDService;
+	private ServiceInterface memberMyPagePService;
+	private ServiceInterface memberListService;
+	private ServiceInterface memberViewPService;
+	private ServiceInterface memberViewDService;
+	private ServiceInterface memberChangeStatusService;
+	private ServiceInterface memberChangeGradeService;
+	private ServiceInterface memberLeaveService;
+	private ServiceInterface memberUpdateService;
+	private ServiceInterface memberUpdateDService;
+	private ServiceInterface memberJoinDriverService;
+	private ServiceInterface memberChangePwService;
+	private ServiceInterface memberFindPwService;
+	private ServiceInterface memberFindIdService;
+	
+	
+	public void setMemberLoginService(ServiceInterface memberLoginService) {
+		this.memberLoginService = memberLoginService;
+	}
+	public void setMemberJoinService(ServiceInterface memberJoinService) {
+		this.memberJoinService = memberJoinService;
+	}
+	public void setMemberCheckIdService(ServiceInterface memberCheckIdService) {
+		this.memberCheckIdService = memberCheckIdService;
+	}
+	public void setMemberMyPageDService(ServiceInterface memberMyPageDService) {
+		this.memberMyPageDService = memberMyPageDService;
+	}
+	public void setMemberMyPagePService(ServiceInterface memberMyPagePService) {
+		this.memberMyPagePService = memberMyPagePService;
+	}
+	public void setMemberListService(ServiceInterface memberListService) {
+		this.memberListService = memberListService;
+	}
+	public void setMemberViewPService(ServiceInterface memberViewPService) {
+		this.memberViewPService = memberViewPService;
+	}
+	public void setMemberViewDService(ServiceInterface memberViewDService) {
+		this.memberViewDService = memberViewDService;
+	}
+	public void setMemberChangeStatusService(ServiceInterface memberChangeStatusService) {
+		this.memberChangeStatusService = memberChangeStatusService;
+	}
+	public void setMemberChangeGradeService(ServiceInterface memberChangeGradeService) {
+		this.memberChangeGradeService = memberChangeGradeService;
+	}
+	public void setMemberLeaveService(ServiceInterface memberLeaveService) {
+		this.memberLeaveService = memberLeaveService;
+	}
+	public void setMemberUpdateService(ServiceInterface memberUpdateService) {
+		this.memberUpdateService = memberUpdateService;
+	}
+	public void setMemberUpdateDService(ServiceInterface memberUpdateDService) {
+		this.memberUpdateDService = memberUpdateDService;
+	}
+	public void setMemberJoinDriverService(ServiceInterface memberJoinDriverService) {
+		this.memberJoinDriverService = memberJoinDriverService;
+	}
+	public void setMemberChangePwService(ServiceInterface memberChangePwService) {
+		this.memberChangePwService = memberChangePwService;
+	}
+	public void setMemberFindPwService(ServiceInterface memberFindPwService) {
+		this.memberFindPwService = memberFindPwService;
+	}
+	public void setMemberFindIdService(ServiceInterface memberFindIdService) {
+		this.memberFindIdService = memberFindIdService;
+	}
+	
+
+	public String execute(HttpServletRequest request) throws Exception {
+		System.out.println("MemberController----------------------");
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		String jsp = null;
+		
+		
+		switch (uri) {
+		case "/member/login.do":
+			HttpSession session = request.getSession();
+			if(method.equals("GET")) {
+				jsp = "member/login";
+			} else {
+				LoginVO loginVO = new LoginVO();
+				loginVO.setId(request.getParameter("id"));
+				loginVO.setPw(request.getParameter("pw"));
+				
+				LoginVO statusVO = new LoginVO();
+				statusVO = (LoginVO) Execute.run(memberLoginService, loginVO);
+				session.setAttribute("login", statusVO);
+				if(session.getAttribute("login") == null) {
+					throw new Exception("아이디와 비밀번호를 확인해 주세요.");
+				} else if(statusVO.getStatus().equals("탈퇴") || statusVO.getStatus().equals("이용정지")) {
+					throw new Exception("탈퇴 혹은 이용정지 처리된 회원입니다.");
+				}
+				jsp = "redirect:/";
+			}
+			break;
+			
+		case "/member/join.do":
+			if(method.equals("GET")) {
+				jsp = "member/join";
+			} else {
+				MemberVO joinVO = new MemberVO();
+				joinVO.setId(request.getParameter("id"));
+				joinVO.setPw(request.getParameter("pw"));
+				joinVO.setNickname(request.getParameter("nickname"));
+				joinVO.setName(request.getParameter("name"));
+				joinVO.setProfileImage(request.getParameter("profileImage"));
+				joinVO.setBirth(request.getParameter("birth_y")+request.getParameter("birth_m")+request.getParameter("birth_d"));
+				joinVO.setGender(request.getParameter("gender"));
+				joinVO.setTel(request.getParameter("tel_1")+request.getParameter("tel_2")+request.getParameter("tel_3"));
+				joinVO.setBank(request.getParameter("bank"));
+				joinVO.setAccount(request.getParameter("account"));
+				
+				Execute.run(memberJoinService, joinVO);
+				jsp = "redirect:/";
+			}
+			break;
+			
+		case "/member/checkId.do":
+			String id = request.getParameter("id");
+			if((boolean) Execute.run(memberCheckIdService, id)) {
+				jsp = "member/overlap";
+			} else {
+				jsp = "member/checkId";
+			}
+			break;
+			
+		case "/member/findId.do":
+			jsp = "member/checkId";
+			break;
+			
+		case "/member/findPw.do":
+			jsp = "member/checkId";
+			break;
+			
+		// 회원--------------------------------------------------------------------------------	
+			
+		case "/member/logout.do":
+			session = request.getSession();
+			session.removeAttribute("login");
+			jsp = "redirect:/";
+			break;
+		
+		case "/member/myPage.do":
+			String myPageId = request.getParameter("id");
+			viewService(myPageId, memberMyPagePService, memberMyPageDService, request);
+//			LoginVO loginVO = (LoginVO) request.getSession().getAttribute("login");
+//			String myPageId = loginVO.getId();
+//			LoginVO vo = (LoginVO) Execute.run(memberLoginService, loginVO);
+//			if(vo.getGradeNo() == 2) {
+//				MemberVO myPageVO = (MemberVO) Execute.run(memberMyPageDService, myPageId);
+//				request.setAttribute("vo", myPageVO);
+//			} else {
+//				MemberVO myPageVO = (MemberVO) Execute.run(memberMyPagePService, myPageId);
+//				request.setAttribute("vo", myPageVO);
+//			}
+			jsp = "member/myPage";
+			break;
+			
+		case "/member/update.do":
+			String updateId = request.getParameter("id");
+			if(method.equals("GET")) {
+				viewService(updateId, memberViewPService, memberViewDService, request);
+//				MemberVO updateVO = (MemberVO) Execute.run(memberViewPService, updateId);
+//				if(updateVO.getGradeNo() == 1 || updateVO.getGradeNo() == 9) {
+//					request.setAttribute("vo", updateVO);
+//				} else if(updateVO.getGradeNo() == 2) {
+//					MemberVO update2VO = (MemberVO) Execute.run(memberViewDService, updateId);
+//					request.setAttribute("vo", update2VO);
+//				}
+				jsp = "member/update";
+			} else {
+				MemberVO updateVO = new MemberVO();
+				updateVO.setId(updateId);
+				updateVO.setNickname(request.getParameter("nickname"));
+				updateVO.setTel(request.getParameter("tel"));
+				updateVO.setBank(request.getParameter("bank"));
+				updateVO.setAccount(request.getParameter("account"));
+				Execute.run(memberUpdateService, updateVO);
+				
+				MemberVO update2VO = (MemberVO) Execute.run(memberViewPService, updateId);
+				if(update2VO.getGradeNo() == 2) {
+					updateVO.setCarModel(request.getParameter("carModel"));
+					updateVO.setCarNo(request.getParameter("carNo"));
+					Execute.run(memberUpdateDService, updateVO);
+				}
+				jsp = "redirect:myPage.do?id=" + updateId;
+			}
+			break;
+			
+		case "/member/changePw.do":
+			String changePwId = request.getParameter("id");
+			if(method.equals("GET")) {
+				jsp = "member/changePw";
+			} else {
+				changePwId = request.getParameter("id");
+				String oldPw = request.getParameter("oldPw");
+				String pw = request.getParameter("pw");
+				System.out.println("******" + changePwId);
+				System.out.println("******" + oldPw);
+				System.out.println("******" + pw);
+				Execute.run(memberChangePwService, new Object[] {changePwId, oldPw, pw});
+			}
+			jsp = "redirect:myPage.do?id=" + changePwId;
+			break;
+			
+		case "/member/joinDriver.do":
+			
+			break;
+			
+		case "/member/leave.do":
+			MemberVO deleteVO = new MemberVO();
+			deleteVO.setId(request.getParameter("id"));
+			deleteVO.setPw(request.getParameter("pw"));
+			Execute.run(memberLeaveService, deleteVO);
+			session = request.getSession();
+			session.removeAttribute("login");
+			jsp = "redirect:/";
+			break;
+		
+		//관리자----------------------------------------------------------------------------------
+			
+		case "/member/list.do":
+			request.setAttribute("list", Execute.run(memberListService, null));
+			jsp = "member/list";
+			break;
+			
+		case "/member/view.do":
+			String viewId = request.getParameter("id");
+			viewService(viewId, memberViewPService, memberViewDService, request);
+//			MemberVO viewPVO = (MemberVO) Execute.run(memberViewPService, viewId);
+//			if(viewPVO.getGradeNo() == 1 || viewPVO.getGradeNo() == 9) {
+//				request.setAttribute("vo", viewPVO);
+//			} else if(viewPVO.getGradeNo() == 2) {
+//				MemberVO viewDVO = (MemberVO) Execute.run(memberViewDService, viewId);
+//				request.setAttribute("vo", viewDVO);
+//			}
+			jsp = "member/view";
+			break;
+			
+		case "/member/changeStatus.do":
+			String changeStatusId = request.getParameter("id");
+			if(method.equals("GET")) {
+				viewService(changeStatusId, memberViewPService, memberViewDService, request);
+//				MemberVO viewVO = (MemberVO) Execute.run(memberViewPService, changeId);
+//				if(viewVO.getGradeNo() == 1 || viewVO.getGradeNo() == 9) {
+//					request.setAttribute("vo", viewVO);
+//				} else if(viewVO.getGradeNo() == 2) {
+//					MemberVO view2VO = (MemberVO) Execute.run(memberViewDService, changeId);
+//					request.setAttribute("vo", view2VO);
+//				}
+				jsp = "member/changeStatus";
+			} else {
+				MemberVO changeVO = new MemberVO();
+				changeVO.setId(changeStatusId);
+				changeVO.setStatus(request.getParameter("status"));
+				Execute.run(memberChangeStatusService, changeVO);
+				jsp = "redirect:view.do?id=" + changeStatusId;
+			}
+			break;
+			
+		case "/member/changeGrade.do":
+			String changeGradeId = request.getParameter("id");
+			if(method.equals("GET")) {
+				viewService(changeGradeId, memberViewPService, memberViewDService, request);
+//				MemberVO viewVO = (MemberVO) Execute.run(memberViewPService, changeId);
+//				if(viewVO.getGradeNo() == 1 || viewVO.getGradeNo() == 9) {
+//					request.setAttribute("vo", viewVO);
+//				} else if(viewVO.getGradeNo() == 2) {
+//					MemberVO view2VO = (MemberVO) Execute.run(memberViewDService, changeId);
+//					request.setAttribute("vo", view2VO);
+//				}
+				jsp = "member/changeGrade";
+			} else {
+				MemberVO changeVO = new MemberVO();
+				changeVO.setId(changeGradeId);
+				long gradeNo = Long.parseLong(request.getParameter("grade").substring(0, 1));
+				changeVO.setGradeNo(gradeNo);
+				Execute.run(memberChangeGradeService, changeVO);
+				jsp = "redirect:view.do?id=" + changeGradeId;
+			}
+			break;
+
+		default:
+			throw new Exception("잘못된 페이지를 요청하셨습니다.");
+		}
+		
+  		return jsp;
+	}
+	
+	// view 서비스에 사용되는 아주아주 긴 코드를 간소화하기 위한 메서드
+	private void viewService(String id, ServiceInterface dService, ServiceInterface pService, HttpServletRequest request) throws Exception {
+		MemberVO vo = (MemberVO) Execute.run(dService, id);
+		if(vo.getGradeNo() == 1 || vo.getGradeNo() == 9) {
+			request.setAttribute("vo", vo);
+		} else if(vo.getGradeNo() == 2) {
+			MemberVO vo2 = (MemberVO) Execute.run(pService, id);
+			request.setAttribute("vo", vo2);
+		}
+	}
+	
+}

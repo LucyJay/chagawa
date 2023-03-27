@@ -1,0 +1,95 @@
+package com.chagawa.main;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import com.chagawa.member.controller.MemberController;
+import com.chagawa.member.dao.MemberDAOImpl;
+import com.chagawa.member.service.MemberChangeGradeServiceImpl;
+import com.chagawa.member.service.MemberChangeStatusServiceImpl;
+import com.chagawa.member.service.MemberCheckIdServiceImpl;
+import com.chagawa.member.service.MemberJoinServiceImpl;
+import com.chagawa.member.service.MemberListServiceImpl;
+import com.chagawa.member.service.MemberLoginServiceImpl;
+import com.chagawa.member.service.MemberMyPageDServiceImpl;
+import com.chagawa.member.service.MemberMyPagePServiceImpl;
+import com.chagawa.member.service.MemberViewDServiceImpl;
+import com.chagawa.member.service.MemberViewPServiceImpl;
+import com.chagawa.message.controller.MessageController;
+import com.chagawa.message.dao.MessageDAOImpl;
+import com.chagawa.message.service.MessageListServiceImpl;
+import com.chagawa.messageRoom.controller.MessageRoomController;
+import com.chagawa.messageRoom.dao.MessageRoomDAOImpl;
+import com.chagawa.messageRoom.service.MessageRoomListServiceImpl;
+
+
+public class Init {
+	// 컨트롤러, DAO, 서비스를 담을 맵 생성
+	private static Map<String, Object> controllerMap = new HashMap<>();
+	private static Map<String, Object> daoMap = new HashMap<>();
+	private static Map<String, ServiceInterface> serviceMap = new HashMap<>();
+	public static void init() {
+
+		// 컨트롤러 등록
+		controllerMap.put("messageController", new MessageController());
+		controllerMap.put("messageRoomController", new MessageRoomController());
+		controllerMap.put("memberController", new MemberController());
+		
+		// DAO 등록
+		daoMap.put("messageDAO", new MessageDAOImpl());
+		daoMap.put("messageRoomDAO", new MessageRoomDAOImpl());
+		daoMap.put("memberDAO", new MemberDAOImpl());
+		
+		// 서비스 등록
+		serviceMap.put("messageListServiceImpl", new MessageListServiceImpl());
+		serviceMap.put("messageRoomListServiceImpl", new MessageRoomListServiceImpl());
+		
+		serviceMap.put("memberLoginServiceImpl", new MemberLoginServiceImpl());
+		serviceMap.put("memberJoinServiceImpl", new MemberJoinServiceImpl());
+		serviceMap.put("memberCheckIdServiceImpl", new MemberCheckIdServiceImpl());
+		serviceMap.put("memberMyPageDServiceImpl", new MemberMyPageDServiceImpl());
+		serviceMap.put("memberMyPagePServiceImpl", new MemberMyPagePServiceImpl());
+		serviceMap.put("memberListServiceImpl", new MemberListServiceImpl());
+		serviceMap.put("memberViewPServiceImpl", new MemberViewPServiceImpl());
+		serviceMap.put("memberViewDServiceImpl", new MemberViewDServiceImpl());
+		serviceMap.put("memberChangeStatusServiceImpl", new MemberChangeStatusServiceImpl());
+		serviceMap.put("memberChangeGradeServiceImpl", new MemberChangeGradeServiceImpl());
+		
+		// 각 서비스에 DAO 연결
+		serviceMap.get("messageListServiceImpl").setDao(daoMap.get("messageDAO"));
+		serviceMap.get("messageRoomListServiceImpl").setDao(daoMap.get("messageRoomDAO"));
+		
+		serviceMap.get("memberLoginServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberJoinServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberCheckIdServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberMyPageDServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberMyPagePServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberListServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberViewPServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberViewDServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberChangeStatusServiceImpl").setDao(daoMap.get("memberDAO"));
+		serviceMap.get("memberChangeGradeServiceImpl").setDao(daoMap.get("memberDAO"));
+		
+		// 각 컨트롤러에 서비스 연결
+		((MessageController) controllerMap.get("messageController")).setMessageListService(serviceMap.get("messageListServiceImpl"));
+		((MessageRoomController) controllerMap.get("messageRoomController")).setMessageRoomListService(serviceMap.get("messageRoomListServiceImpl"));
+		
+		((MemberController) controllerMap.get("memberController")).setMemberLoginService(serviceMap.get("memberLoginServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberJoinService(serviceMap.get("memberJoinServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberCheckIdService(serviceMap.get("memberCheckIdServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberMyPageDService(serviceMap.get("memberMyPageDServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberMyPagePService(serviceMap.get("memberMyPagePServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberListService(serviceMap.get("memberListServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberViewPService(serviceMap.get("memberViewPServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberViewDService(serviceMap.get("memberViewDServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberChangeStatusService(serviceMap.get("memberChangeStatusServiceImpl"));
+		((MemberController) controllerMap.get("memberController")).setMemberChangeGradeService(serviceMap.get("memberChangeGradeServiceImpl"));
+	
+	
+	}
+	
+	public static Object getController(String controller) {
+		return controllerMap.get(controller);
+	}
+
+}

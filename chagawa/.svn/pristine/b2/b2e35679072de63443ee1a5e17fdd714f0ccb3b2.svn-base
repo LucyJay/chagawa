@@ -1,0 +1,21 @@
+package com.chagawa.notice.dao;
+
+import java.util.List;
+
+import com.chagawa.notice.vo.NoticeVO;
+
+public interface NoticeDAO {
+
+	public List<NoticeVO> list() throws Exception;
+	
+	public long getTotalRow() throws Exception;
+	
+	public NoticeVO view(long no) throws Exception;
+	
+	public int write(NoticeVO vo) throws Exception;
+	
+	
+	
+	
+
+}

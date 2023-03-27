@@ -1,0 +1,141 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내정보수정</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#tel_2").val(($("#tel").val()).substring(4,8));
+	$("#tel_3").val(($("#tel").val()).substring(9,13));
+	
+	$("#checkNickname").click(function() {
+		if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+		window.open("checkNickname.do?nickname=" + $("#nickname").val(), "checkNickname", "width= 800, height= 400, top= 200, left= 600");
+	});
+	$("#checkTel").click(function() {
+		if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+		if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+		window.open("checkTel.do?tel_1="+$("#tel_1").val()+"&tel_2="+$("#tel_2").val()+"&tel_3="+$("#tel_3").val(), "checkTel", "width= 800, height= 400, top= 200, left= 600");
+	});
+	$("#checkCar").click(function() {
+		if (!checkData(reg_carNo, $("#carNo"), reg_carNo_error_msg, 1)) return false;
+		window.open("checkCar.do?carNo=" + $("#carNo").val(), "checkCar", "width= 800, height= 400, top= 200, left= 600");
+	});
+	
+	$("#updateForm").submit(function() {
+		if (!checkData(reg_nickname, $("#nickname"), reg_nickname_error_msg, 1)) return false;
+		if (!checkData(reg_tel1, $("#tel_2"), reg_tel1_error_msg, 1)) return false;
+		if (!checkData(reg_tel2, $("#tel_3"), reg_tel2_error_msg, 1)) return false;
+		if($("#bank").val() == "-은행-"){
+			alert("은행을 선택해주세요.");
+			return false;
+		}
+		if (!checkData(reg_account, $("#account"), reg_account_error_msg, 1)) return false;
+		if (!checkData(reg_carModel, $("#carModel"), reg_carModel_error_msg, 1)) return false;
+		if (!checkData(reg_carNo, $("#carNo"), reg_carNo_error_msg, 1)) return false;
+	});
+	
+	$("#cancelBtn").click(function() {
+		history.back();
+	});
+});
+</script>
+
+</head>
+<body>
+<div>
+	<h3>내 정보 수정</h3>
+	<form action="update.do" method="post" id="updateForm">
+		<div>
+			<label for="id">아이디:</label>
+			<input name="id" id="id" value="${vo.id}" readonly="readonly">
+		</div>
+		<div>
+			<label for="nickname">닉네임:</label>
+			<input name="nickname" id="nickname" value="${vo.nickname}">
+			<button type="button" id="checkNickname">중복확인</button>
+		</div>
+		<div>
+			<label for="name">이름:</label>
+			<input name="name" id="name" value="${vo.name}" readonly="readonly">
+		</div>
+		<div>
+			<label for="gender">성별:</label>
+			<input name="gender" id="gender" value="${vo.gender}" readonly="readonly">
+		</div>
+		<div>
+			<label for="birth">생년월일:</label>
+			<input name="birth" id="birth" value="${vo.birth}" readonly="readonly">
+		</div>
+		<div>
+			<input name="tel" id="tel" value="${vo.tel}" type="hidden">
+			<label for="tel_1">연락처:</label>
+			<select name="tel_1" id="tel_1">
+				<option>010</option>
+				<option>011</option>
+				<option>012</option>
+				<option>013</option>
+				<option>014</option>
+				<option>015</option>
+				<option>016</option>
+				<option>017</option>
+				<option>018</option>
+				<option>019</option>
+			</select>
+			<input name="tel_2" id="tel_2">
+			<input name="tel_3" id="tel_3">
+			<button type="button" id="checkTel">중복확인</button>
+		</div>
+		<div>
+			<label for="bank">계좌:</label>
+			<select name="bank" id="bank">
+				<option <c:if test="${vo.bank eq '신한'}">selected</c:if>>신한</option>
+				<option <c:if test="${vo.bank eq '국민'}">selected</c:if>>국민</option>
+				<option <c:if test="${vo.bank eq '우리'}">selected</c:if>>우리</option>
+				<option <c:if test="${vo.bank eq '농협'}">selected</c:if>>농협</option>
+				<option <c:if test="${vo.bank eq '하나'}">selected</c:if>>하나</option>
+				<option <c:if test="${vo.bank eq '카카오'}">selected</c:if>>카카오</option>
+				<option <c:if test="${vo.bank eq '새마을'}">selected</c:if>>새마을</option>
+				<option <c:if test="${vo.bank eq '우체국'}">selected</c:if>>우체국</option>
+			</select>
+			<input name="account" id="account" value="${vo.account}">
+		</div>
+		<div>
+			<label for="gradeName">등급:</label>
+			<input name="gradeName" id="gradeName" value="${vo.gradeName}" readonly="readonly">
+		</div>
+		<div>
+			<label for="regDate">가입일:</label>
+			<input name="regDate" id="regDate" value="${vo.regDate}" readonly="readonly">
+		</div>
+		<c:if test="${vo.gradeNo == 2}">
+			<div>
+				<label for="carModel">차종:</label>
+				<input name="carModel" id="carModel" value="${vo.carModel}">
+			</div>
+			<div>
+				<label for="carNo">차량번호:</label>
+				<input name="carNo" id="carNo" value="${vo.carNo}">
+				<button type="button" id="checkCar">중복확인</button>
+			</div>
+			<div>
+				<label for="licenseNo">면허번호:</label>
+				<input name="licenseNo" id="licenseNo" value="${vo.licenseNo}" readonly="readonly">
+			</div>
+		</c:if>
+		<div>
+			<button>수정</button>
+			<button type="reset">새로입력</button>
+			<button type="button" id="cancelBtn">취소</button>
+		</div>
+	</form>
+</div>
+</body>
+</html>

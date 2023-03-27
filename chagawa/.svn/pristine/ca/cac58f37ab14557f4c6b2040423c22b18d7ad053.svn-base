@@ -1,0 +1,597 @@
+package com.chagawa.carpool.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.carpool.vo.CarpoolVO;
+import com.chagawa.carpool.vo.PassengerVO;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.member.vo.MemberVO;
+import com.chagawa.message.vo.MessageVO;
+import com.chagawa.point.vo.PointVO;
+import com.chagawa.starPoint.vo.StarPointVO;
+import com.webjjang.util.PageObject;
+
+public class CarpoolController {
+
+	private ServiceInterface carpoolListService;
+	private ServiceInterface carpoolMyListService;
+	private ServiceInterface carpoolNowService;
+	private ServiceInterface carpoolViewService;
+	private ServiceInterface carpoolWriteService;
+	private ServiceInterface carpoolApplyService;
+	private ServiceInterface carpoolFixService;
+	private ServiceInterface carpoolStopApplyService;
+	private ServiceInterface carpoolGetInService;
+	private ServiceInterface carpoolStartService;
+	private ServiceInterface carpoolArriveService;
+	private ServiceInterface carpoolArriveCheckService;
+	private ServiceInterface carpoolCancelService;
+	private ServiceInterface carpoolCancelApplyService;
+	private ServiceInterface starPointWriteService;
+	private ServiceInterface carpoolStarService;
+	private ServiceInterface pointUpdateService;
+	private ServiceInterface pointWriteService;
+	private ServiceInterface memberMyPagePService;
+	private ServiceInterface messageRoomFRNService;
+	private ServiceInterface messageRoomWriteService;
+	private ServiceInterface messageWriteService;
+	private ServiceInterface messageRoomIncreaseService;
+
+	public void setCarpoolListService(ServiceInterface carpoolListService) {
+		this.carpoolListService = carpoolListService;
+	}
+
+	public void setCarpoolMyListService(ServiceInterface carpoolMyListService) {
+		this.carpoolMyListService = carpoolMyListService;
+	}
+
+	public void setCarpoolNowService(ServiceInterface carpoolNowService) {
+		this.carpoolNowService = carpoolNowService;
+	}
+
+	public void setCarpoolViewService(ServiceInterface carpoolViewService) {
+		this.carpoolViewService = carpoolViewService;
+	}
+
+	public void setCarpoolWriteService(ServiceInterface carpoolWriteService) {
+		this.carpoolWriteService = carpoolWriteService;
+	}
+
+	public void setCarpoolApplyService(ServiceInterface carpoolApplyService) {
+		this.carpoolApplyService = carpoolApplyService;
+	}
+
+	public void setCarpoolFixService(ServiceInterface carpoolFixService) {
+		this.carpoolFixService = carpoolFixService;
+	}
+
+	public void setCarpoolStopApplyService(ServiceInterface carpoolStopApplyService) {
+		this.carpoolStopApplyService = carpoolStopApplyService;
+	}
+
+	public void setCarpoolGetInService(ServiceInterface carpoolGetInService) {
+		this.carpoolGetInService = carpoolGetInService;
+	}
+
+	public void setCarpoolStartService(ServiceInterface carpoolStartService) {
+		this.carpoolStartService = carpoolStartService;
+	}
+
+	public void setCarpoolArriveService(ServiceInterface carpoolArriveService) {
+		this.carpoolArriveService = carpoolArriveService;
+	}
+
+	public void setCarpoolArriveCheckService(ServiceInterface carpoolArriveCheckService) {
+		this.carpoolArriveCheckService = carpoolArriveCheckService;
+	}
+
+	public void setCarpoolCancelService(ServiceInterface carpoolCancelService) {
+		this.carpoolCancelService = carpoolCancelService;
+	}
+
+	public void setCarpoolCancelApplyService(ServiceInterface carpoolCancelApplyService) {
+		this.carpoolCancelApplyService = carpoolCancelApplyService;
+	}
+
+	public void setStarPointWriteService(ServiceInterface starPointWriteService) {
+		this.starPointWriteService = starPointWriteService;
+	}
+
+	public void setCarpoolStarService(ServiceInterface carpoolStarService) {
+		this.carpoolStarService = carpoolStarService;
+	}
+
+	public void setPointUpdateService(ServiceInterface pointUpdateService) {
+		this.pointUpdateService = pointUpdateService;
+	}
+
+	public void setPointWriteService(ServiceInterface pointWriteService) {
+		this.pointWriteService = pointWriteService;
+	}
+
+	public void setMemberMyPagePService(ServiceInterface memberMyPagePService) {
+		this.memberMyPagePService = memberMyPagePService;
+	}
+
+	public void setMessageRoomFRNService(ServiceInterface messageRoomFRNService) {
+		this.messageRoomFRNService = messageRoomFRNService;
+	}
+
+	public void setMessageRoomWriteService(ServiceInterface messageRoomWriteService) {
+		this.messageRoomWriteService = messageRoomWriteService;
+	}
+
+	public void setMessageWriteService(ServiceInterface messageWriteService) {
+		this.messageWriteService = messageWriteService;
+	}
+
+	public void setMessageRoomIncreaseService(ServiceInterface messageRoomIncreaseService) {
+		this.messageRoomIncreaseService = messageRoomIncreaseService;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String execute(HttpServletRequest request) throws Exception {
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("CarpoolController.execute() - uri: " + uri + " | method: " + method);
+		String jsp = null;
+		LoginVO login = (LoginVO) request.getSession().getAttribute("login");
+		boolean isLogin = (login == null) ? false : true;
+		switch (uri) {
+
+		// 카풀 리스트 : 지역 입력해야 조회됨
+		case "/carpool/list.do":
+			String startRegion = request.getParameter("startRegion");
+			if (startRegion != null) {
+				String arriveRegion = request.getParameter("arriveRegion");
+				PageObject pageObject = PageObject.getInstance(request);
+				CarpoolVO listVO = new CarpoolVO();
+				listVO.setStartRegion(startRegion);
+				listVO.setArriveRegion(arriveRegion);
+				request.setAttribute("list",
+						(List<CarpoolVO>) Execute.run(carpoolListService, new Object[] { listVO, pageObject }));
+				request.setAttribute("pageObject", pageObject);
+			}
+			jsp = "carpool/list";
+			break;
+
+		// 카풀 보기 : 카풀 상태가 모집중인 경우에만 적용 - 아닐 경우 접근 시 에러 나도록 향후 조치 필요
+		case "/carpool/view.do":
+			boolean isPsg = false; // 동승신청 버튼 출력 여부 확인용 변수 - 현재 신청중이면 안 뜸
+
+			// view로 카풀 정보를 받아옴
+			Long viewNo = Long.parseLong(request.getParameter("no"));
+			CarpoolVO viewVO = (CarpoolVO) Execute.run(carpoolViewService, viewNo);
+
+			// 카풀 정보 중 동승자 정보를 신청/확정으로 나누어 저장
+			List<PassengerVO> viewPsgList = viewVO.getPsgList();
+			List<PassengerVO> viewPsgAppList = null;
+			List<PassengerVO> viewPsgFixList = null;
+
+			if (viewPsgList != null && viewPsgList.size() > 0) {
+				for (PassengerVO pvo : viewPsgList) {
+					if (pvo.getFixed() == 1) {
+						if (viewPsgFixList == null)
+							viewPsgFixList = new ArrayList<>();
+						viewPsgFixList.add(pvo);
+					} else {
+						if (viewPsgAppList == null)
+							viewPsgAppList = new ArrayList<>();
+						viewPsgAppList.add(pvo);
+					}
+					// 로그인과 일치하는 동승자 정보가 있으면 신청버튼 출력 안 함
+					if (isLogin && login.getId().equals(pvo.getId())) {
+						isPsg = true;
+					}
+				}
+			}
+
+			// 현재 보유 포인트 가져오기 위해 멤버 서비스 사용
+			if (login != null) {
+				long viewPoint = ((MemberVO) Execute.run(memberMyPagePService, login.getId())).getMyPoint();
+				request.setAttribute("point", viewPoint);
+			}
+			// 카풀, 동승자 정보, 신청버튼 출력여부 세팅
+			request.setAttribute("vo", viewVO);
+			request.setAttribute("psgAppList", viewPsgAppList);
+			request.setAttribute("psgFixList", viewPsgFixList);
+			if (isPsg)
+				request.setAttribute("isPsg", 1);
+
+			// 해당 카풀의 드라이버일 경우 드라이버 페이지, 그 외는 신청자 페이지 출력
+			if (isLogin && login.getId().equals(viewVO.getId())) {
+				jsp = "carpool/driverView";
+			} else {
+				jsp = "carpool/view";
+			}
+			break;
+
+		// 카풀 등록 - post로 폼 제출 시 list.do로 이동
+		case "/carpool/write.do":
+			if (method.equals("GET")) {
+				String writeId = login.getId();
+
+				// 로그인 id를 이용해 현재 이용중인 카풀 정보 확인
+				CarpoolVO writeNowVO = (CarpoolVO) Execute.run(carpoolNowService, writeId);
+
+				// 이용 중인 카풀이 있는 경우
+				if (writeNowVO != null) {
+					jsp = "redirect:/carpool/list.do?now=1";
+				} else
+					jsp = "carpool/write";
+			} else {
+				CarpoolVO writeVO = new CarpoolVO();
+				writeVO.setId(request.getParameter("id"));
+				writeVO.setStartRegion(request.getParameter("startRegion"));
+				writeVO.setStartAddress(request.getParameter("startAddress"));
+				writeVO.setArriveRegion(request.getParameter("arriveRegion"));
+				writeVO.setArriveAddress(request.getParameter("arriveAddress"));
+				Double startLat = Double.parseDouble(request.getParameter("startLat"));
+				Double startLng = Double.parseDouble(request.getParameter("startLng"));
+				Double arriveLat = Double.parseDouble(request.getParameter("arriveLat"));
+				Double arriveLng = Double.parseDouble(request.getParameter("arriveLng"));
+				writeVO.setStartLat(startLat);
+				writeVO.setStartLng(startLng);
+				writeVO.setArriveLat(arriveLat);
+				writeVO.setArriveLng(arriveLng);
+				writeVO.setStartTimePre(request.getParameter("startTimePre").replace("T", " "));
+				writeVO.setArriveTimePre(request.getParameter("arriveTimePre").replace("T", " "));
+				writeVO.setMemo(request.getParameter("memo"));
+				Integer wprice = Integer.parseInt(request.getParameter("price"));
+				Integer wseats = Integer.parseInt(request.getParameter("seats"));
+				writeVO.setPrice(wprice);
+				writeVO.setSeats(wseats);
+				if ((Integer) Execute.run(carpoolWriteService, writeVO) == 1) {
+					jsp = "redirect:/carpool/list.do";
+				} else {
+					System.out.println("Write의 결과값이 1이 아님");
+				}
+			}
+			break;
+
+		// now 페이지 : 현재 이용중인 카풀이 없으면 none으로, 있으면 상태에 따라 이동
+		case "/carpool/now.do": // 로그인해야 접속가능하게 할것
+			String nowId = login.getId();
+
+			// 로그인 id를 이용해 현재 이용중인 카풀 정보 확인
+			CarpoolVO nowVO = (CarpoolVO) Execute.run(carpoolNowService, nowId);
+
+			// 이용 중인 카풀이 있는 경우
+			if (nowVO != null) {
+
+				// 동승자인 경우 상태를 변수에 저장
+				String pstatus = nowVO.getPstatus();
+				// 카풀 상세정보 불러오기
+				nowVO = (CarpoolVO) Execute.run(carpoolViewService, nowVO.getNo());
+				List<PassengerVO> nowPsgList = nowVO.getPsgList();
+				List<PassengerVO> nowGotPsgList = null;
+
+				if (nowPsgList != null && nowPsgList.size() > 0) {
+					for (PassengerVO pvo : nowPsgList) {
+						if (pvo.getGotIn() == 1) {
+							if (nowGotPsgList == null)
+								nowGotPsgList = new ArrayList<>();
+							nowGotPsgList.add(pvo);
+						}
+					}
+				}
+
+				request.setAttribute("vo", nowVO);
+				request.setAttribute("list", nowPsgList);
+				request.setAttribute("gotInList", nowGotPsgList);
+				request.setAttribute("pstatus", pstatus);
+
+				// 모집중인 경우 -> view.do로 이동
+				if (nowVO.getStatus().equals("모집중")) {
+					jsp = "redirect:/carpool/view.do?no=" + nowVO.getNo();
+
+					// 도착 시에는 운전자 및 도착확인한 동승자는 finish.jsp로 이동, 나머지는 now.jsp에서 도착확인 처리 필요
+				} else if (nowVO.getStatus().equals("도착")) {
+					if (!nowVO.getId().equals(nowId)) {
+						if (pstatus.equals("도착")) {
+							jsp = "redirect:/carpool/finish.do?cpNo=" + nowVO.getNo(); // 도착한 동승자
+						} else {
+							jsp = "carpool/now"; // 도착안한 동승자
+						}
+					} else
+						jsp = "redirect:/carpool/finish.do?cpNo=" + nowVO.getNo(); // 드라이버
+				} else {
+					// 마감한 뒤로 도착 전까지는 now 출력. 미탑승 동승자는 미탑승 페이지 출력
+					if (pstatus != null && pstatus.equals("미탑승")) { // 미탑승 동승자
+						jsp = "carpool/notin";
+					} else
+						jsp = "carpool/now";
+
+				}
+			} else {
+				jsp = "carpool/none"; // 현재 이용 중인 카풀 없으면 none 화면 출력
+			}
+			break;
+
+		// 동승신청 기능(로그인 필요) -> 모집 중이므로 view로 이동
+		case "/carpool/apply.do":
+			String applyId = login.getId();
+			Long applyNo = Long.parseLong(request.getParameter("cpNo"));
+
+			// 현재 이용중인 카풀이 없는지 확인 후 insert
+			if ((CarpoolVO) Execute.run(carpoolNowService, applyId) != null) {
+				// exist는 카풀 있다고 알림 띄우는 용도
+				jsp = "redirect:/carpool/view.do?no=" + applyNo + "&exist=1";
+			} else {
+				// 이용 중인 카풀이 없으면 insert 실행 후 view로 이동
+				PassengerVO applyVO = new PassengerVO();
+				Long applyCpno = Long.parseLong(request.getParameter("cpNo"));
+				applyVO.setCpNo(applyCpno);
+				applyVO.setId(applyId);
+				applyVO.setMsg(request.getParameter("msg"));
+				Integer result = (Integer) Execute.run(carpoolApplyService, applyVO);
+				if (result == 1) {
+					jsp = "redirect:/carpool/view.do?no=" + applyNo;
+				} else
+					System.out.println("apply 결과가 1이 아님");
+			}
+			break;
+
+		// 동승신청 취소 기능
+		case "/carpool/cancelapply.do":
+			if (method.equals("POST")) {
+				PassengerVO cancelApplyVO = new PassengerVO();
+				Long cancelApplyCpno = Long.parseLong(request.getParameter("cpNo"));
+				cancelApplyVO.setCpNo(cancelApplyCpno);
+				cancelApplyVO.setId(login.getId());
+				if ((Integer) Execute.run(carpoolCancelApplyService, cancelApplyVO) == 1) {
+					jsp = "redirect:/carpool/list.do";
+				} else
+					System.out.println("cancelApply 결과가 1이 아님");
+			}
+			break;
+
+		// 동승확정 기능
+		case "/carpool/fix.do":
+			if (method.equals("POST")) {
+				PassengerVO fixVO = new PassengerVO();
+				Long fixNo = Long.parseLong(request.getParameter("cpNo"));
+				fixVO.setCpNo(fixNo);
+				fixVO.setId(request.getParameter("psgId"));
+				if ((Integer) Execute.run(carpoolFixService, fixVO) == 1)
+					jsp = "redirect:/carpool/view.do?no=" + fixNo;
+				else
+					System.out.println("fix의 결과값이 1이 아님");
+			}
+			break;
+
+		// 동승신청 마감 기능
+		case "/carpool/stopapply.do":
+			if (method.equals("POST")) {
+				Long stopNo = Long.parseLong(request.getParameter("cpNo"));
+				Execute.run(carpoolStopApplyService, stopNo);
+				jsp = "redirect:/carpool/now.do";
+			}
+			break;
+
+		// 탑승확인 기능
+		case "/carpool/getin.do":
+			if (method.equals("POST")) {
+				PassengerVO getinVO = new PassengerVO();
+				Long getinNo = Long.parseLong(request.getParameter("cpNo"));
+				getinVO.setCpNo(getinNo);
+				getinVO.setId(login.getId());
+				if ((Integer) Execute.run(carpoolGetInService, getinVO) == 1)
+					jsp = "redirect:/carpool/now.do";
+				else
+					System.out.println("getin의 결과값이 1이 아님");
+			}
+			break;
+
+		// 출발 기능
+		case "/carpool/start.do":
+			if (method.equals("POST")) {
+				Long startNo = Long.parseLong(request.getParameter("cpNo"));
+				Execute.run(carpoolStartService, startNo);
+				jsp = "redirect:/carpool/now.do";
+			}
+			break;
+
+		// 도착 기능
+		case "/carpool/arrive.do":
+			if (method.equals("POST")) {
+				String arriveId = login.getId();
+				Long arriveNo = Long.parseLong(request.getParameter("cpNo"));
+				if (request.getParameter("driver") == null) { // 드라이버면 arrive 실행
+					Execute.run(carpoolArriveService, arriveNo);
+				} else { // 동승자면 arriveCheck 실행
+					PassengerVO arriveVO = new PassengerVO();
+					arriveVO.setCpNo(arriveNo);
+					arriveVO.setId(arriveId);
+					Integer result = (Integer) Execute.run(carpoolArriveCheckService, arriveVO);
+
+					// 전원 도착확인 시 포인트 지급 실행
+					if (result == 0) {
+
+						// 동승자 리스트 필요하므로 View로 가져옴
+						CarpoolVO arriveCVO = (CarpoolVO) Execute.run(carpoolViewService, arriveNo);
+
+						List<PassengerVO> arrivePsgList = arriveCVO.getPsgList();
+						List<PassengerVO> arriveGotPsgList = null;
+
+						if (arrivePsgList != null && arrivePsgList.size() > 0) {
+							for (PassengerVO pvo : arrivePsgList) {
+								if (pvo.getGotIn() == 1) {
+									if (arriveGotPsgList == null)
+										arriveGotPsgList = new ArrayList<>();
+									arriveGotPsgList.add(pvo);
+								}
+							}
+						}
+
+						if (arriveGotPsgList != null) {
+							PointVO pointVO = new PointVO();
+
+							// 동승자 포인트 차감
+							for (PassengerVO apvo : arriveGotPsgList) {
+								pointVO.setId(apvo.getId());
+								pointVO.setPrice(-(arriveCVO.getPrice()));
+								Execute.run(pointUpdateService, pointVO);
+
+								pointVO.setMemo(arriveCVO.getNo() + "번 카풀 동승료 차감");
+								Execute.run(pointWriteService, pointVO);
+							}
+
+							// 드라이버 포인트 지급
+							pointVO.setId(arriveCVO.getId());
+							pointVO.setPrice(arriveCVO.getPrice() * arriveCVO.getPsgArrCount());
+							Execute.run(pointUpdateService, pointVO);
+
+							pointVO.setMemo(arriveCVO.getNo() + "번 카풀 동승료 지급");
+							Execute.run(pointWriteService, pointVO);
+						}
+					}
+				}
+				jsp = "redirect:/carpool/finish.do?cpNo=" + arriveNo;
+			}
+			break;
+
+		// 종료(별점) 페이지로 이동
+		case "/carpool/finish.do":
+			Long finishNo = Long.parseLong(request.getParameter("cpNo"));
+			String finishId = login.getId();
+			int fstar = 0;
+
+			// 카풀 상세정보 불러오기
+			CarpoolVO finishVO = (CarpoolVO) Execute.run(carpoolViewService, finishNo);
+			List<PassengerVO> finishPsgList = finishVO.getPsgList();
+			List<PassengerVO> finishGotPsgList = null;
+			if (finishVO.getId().equals(finishId))
+				fstar = finishVO.getStar();
+
+			// 동승자 리스트 불러오기
+			if (finishPsgList != null && finishPsgList.size() > 0) {
+				for (PassengerVO pvo : finishPsgList) {
+					if (pvo.getGotIn() == 1) {
+						if (finishGotPsgList == null)
+							finishGotPsgList = new ArrayList<>();
+						finishGotPsgList.add(pvo);
+						if (pvo.getId().equals(finishId))
+							fstar = pvo.getStar();
+					}
+				}
+			}
+
+			request.setAttribute("vo", finishVO);
+			request.setAttribute("list", finishGotPsgList);
+			request.setAttribute("star", fstar);
+			jsp = "carpool/finish";
+			break;
+
+		case "/carpool/star.do":
+			if (method.equals("POST")) {
+				// 별점 대상 추려내기: 해당 번호 카풀 정보 중 탑승한 사람만 뽑은 리스트 추출
+				Long starNo = Long.parseLong(request.getParameter("cpNo"));
+				CarpoolVO starCVO = (CarpoolVO) Execute.run(carpoolViewService, starNo);
+				List<PassengerVO> starPsgList = starCVO.getPsgList();
+				List<PassengerVO> starGotPsgList = null;
+				if (starPsgList != null && starPsgList.size() > 0) {
+					for (PassengerVO pvo : starPsgList) {
+						if (pvo.getGotIn() == 1) {
+							if (starGotPsgList == null)
+								starGotPsgList = new ArrayList<>();
+							starGotPsgList.add(pvo);
+						}
+					}
+				}
+
+				String loginId = login.getId();
+				// 별점 주는 사람 세팅, 받는 사람 및 별점 변수 선언
+				StarPointVO starVO = new StarPointVO();
+				starVO.setCpNo(starNo);
+				starVO.setStarter(loginId);
+				String receiverId = null;
+				Long star = null;
+
+				// 드라이버가 아닌 경우 드라이버에게 별점 주기 실행, 드라이버 여부에 따라 jsp 설정
+				receiverId = starCVO.getId();
+				if (!loginId.equals(receiverId)) {
+					starVO.setReceiver(receiverId);
+					star = Long.parseLong(request.getParameter(receiverId));
+					starVO.setStar(star);
+					Execute.run(starPointWriteService, starVO);
+					jsp = "redirect:/carpool/mylist.do?isDriver=psg&id=" + loginId;
+				} else {
+					jsp = "redirect:/carpool/mylist.do?isDriver=driver&id=" + loginId;
+				}
+
+				// 동승자에 별점 주기
+				if (starGotPsgList != null) {
+					for (PassengerVO starPVO : starGotPsgList) {
+						receiverId = starPVO.getId();
+						if (!loginId.equals(receiverId)) {
+							starVO.setReceiver(starPVO.getId());
+							star = Long.parseLong(request.getParameter(receiverId));
+							starVO.setStar(star);
+							Execute.run(starPointWriteService, starVO);
+						}
+					}
+				}
+
+				Execute.run(carpoolStarService, starVO);
+			}
+			break;
+
+		// 취소 페이지가 따로 없는 대신 메시지 발송
+		case "/carpool/cancel.do":
+			if (method.equals("POST")) {
+				Long cancelNo = Long.parseLong(request.getParameter("cpNo"));
+
+				String cancelId = login.getId();
+				List<PassengerVO> cancelList = (List<PassengerVO>) Execute.run(carpoolCancelService, cancelNo);
+
+				if (cancelList != null) {
+					for (PassengerVO cancelVO : cancelList) {
+						String cancelPid = cancelVO.getId();
+						// 메시지 발송을 위해 roomno 얻기
+						long roomno = (long) Execute.run(messageRoomFRNService, new Object[] { cancelId, cancelPid });
+						if (roomno == 0) {
+							Execute.run(messageRoomWriteService, new Object[] { cancelId, cancelPid });
+							roomno = (long) Execute.run(messageRoomFRNService, new Object[] { cancelId, cancelPid });
+						}
+
+						// 메시지 발송
+						MessageVO vo = new MessageVO();
+						vo.setContent("[알림]동승을 신청한 카풀의 운행이 취소되었습니다. 동승이 확정된 상태였다면 운행내역에서 취소내역을 확인하실 수 있습니다.");
+						Execute.run(messageWriteService, new Object[] { cancelId, cancelPid, roomno, vo });
+						Execute.run(messageRoomIncreaseService, new Object[] { roomno, cancelPid });
+					}
+				}
+
+				jsp = "redirect:/carpool/mylist.do";
+			}
+			break;
+
+		// 내 이용내역 서비스 - 운행, 동승 중 선택
+		case "/carpool/mylist.do":
+			String isDriver = request.getParameter("isDriver");
+			if (isDriver != null) {
+				PageObject pageObject = PageObject.getInstance(request);
+				String myid = request.getParameter("id");
+				List<CarpoolVO> mylist = null;
+				mylist = (List<CarpoolVO>) Execute.run(carpoolMyListService,
+						new Object[] { myid, pageObject, isDriver });
+
+				request.setAttribute("mylist", mylist);
+				request.setAttribute("pageObject", pageObject);
+			}
+			jsp = "carpool/mylist";
+			break;
+		default:
+			jsp = "redirect:/error/404.do";
+		}
+		System.out.println("jsp:" + jsp);
+		return jsp;
+	}
+
+}

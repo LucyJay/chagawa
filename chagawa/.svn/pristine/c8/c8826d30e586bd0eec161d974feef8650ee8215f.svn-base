@@ -1,0 +1,23 @@
+package com.chagawa.carpool.service;
+
+import com.chagawa.carpool.dao.CarpoolDAO;
+import com.chagawa.carpool.vo.PassengerVO;
+import com.chagawa.main.ServiceInterface;
+
+public class CarpoolFixServiceImpl implements ServiceInterface {
+
+	private CarpoolDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (CarpoolDAO) obj;
+	}
+
+	@Override
+	public Object service(Object obj) throws Exception {
+		PassengerVO vo = (PassengerVO) obj;
+		vo.setStatus("확정");
+		return dao.updatePsgStatus(vo); // 동승자 상태 확정으로 변경
+
+	}
+}

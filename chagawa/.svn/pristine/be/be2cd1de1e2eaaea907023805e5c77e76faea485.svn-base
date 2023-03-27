@@ -1,0 +1,29 @@
+package com.chagawa.messageRoom.service;
+
+import com.chagawa.messageRoom.dao.MessageRoomDAO;
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.main.ServiceInterface;
+
+public class MessageRoomWriteServiceImpl implements ServiceInterface{
+	private MessageRoomDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (MessageRoomDAO)obj;
+	}
+	
+	public Object service(Object obj) throws Exception {
+		System.out.println("MessageRoomWriteServiceImpl.service()");
+		
+		Object[] objs = (Object[]) obj;
+		String par1 = (String) objs[0];
+		System.out.println(objs[0]);
+		String id = (String) objs[1];
+		System.out.println(objs[1]);
+		return dao.write(par1,id);
+	}
+
+
+
+
+}

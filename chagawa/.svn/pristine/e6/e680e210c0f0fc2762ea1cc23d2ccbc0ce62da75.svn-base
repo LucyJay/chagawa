@@ -1,0 +1,26 @@
+package com.chagawa.message.dao;
+
+import java.util.List;
+
+import com.chagawa.message.vo.MessageVO;
+import com.chagawa.message.vo.MessageVO;
+//import com.chagawa.util.PageObject;
+
+public interface MessageDAO {
+
+	public List<MessageVO> list() throws Exception;
+
+//	public long getTotalRow(PageObject pageObject) throws Exception;
+//	
+//	public NoticeVO view(long no) throws Exception;
+//	
+//	public int increase(long no) throws Exception;
+//
+//	public int write(NoticeVO vo) throws Exception;
+//
+//	public int update(NoticeVO vo) throws Exception;
+//
+//	public int delete(NoticeVO vo) throws Exception;
+//	
+	
+}

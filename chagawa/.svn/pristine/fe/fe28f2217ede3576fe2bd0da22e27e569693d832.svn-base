@@ -1,0 +1,69 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>후기 글 등록</title>
+
+<!-- 라이브러리 등록  : CDN 방식 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	$("#writeForm").submit(function(){
+		// 제목, 내용, 작성자
+		if(!checkData(reg_title, $("#title"), reg_title_error_msg, 1)) return false;
+		if(!checkData(reg_content, $("#content"), reg_content_error_msg, 1)) return false;
+		if(!checkData(reg_name, $("#writer"), reg_name_error_msg, 1)) return false;
+		
+	});
+	
+	// 취소 이벤트
+	$("#cancelBtn").click(function(){
+		history.back();
+	})
+});
+</script>
+
+</head>
+<body>
+<div class="container">
+	<h1>후기 작성</h1>
+	<form action="write.do" method="post" id="writeForm">
+		<input type="hidden" name="perPageNum" value="${param.perPageNum }">
+		<div class="form-group">
+			<label for="title">제목</label>
+			<input name="title" id="title" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="content">내용</label>
+			<textarea name="content" id="content" class="form-control"></textarea>
+		</div>
+		<div class="form-group">
+			<label for="writer">작성자</label>
+			<input name="writer" id="writer" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="cpNo">카풀번호</label>
+			<select>
+				<c:forEach items="${list }" var="no">
+					<tr>
+						<td class="cpNo">${no }</td>
+					</tr>
+				</c:forEach>
+			</select>
+		</div>
+		<button>등록</button>
+		<button type="reset">새로입력</button>
+		<button type="button" id="cancelBtn">취소</button>
+	</form>
+</div>
+</body>
+</html>

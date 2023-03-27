@@ -1,0 +1,103 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내정보보기</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+</head>
+<body>
+<div>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>프로필사진</th>
+					<img src="${vo.profileImage}">
+				</tr>
+				<tr>
+					<th>아이디</th>
+					<td>${vo.id}</td>
+				</tr>
+				<tr>
+					<th>닉네임</th>
+					<td>${vo.nickname}</td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td>${vo.name}</td>
+				</tr>
+				<tr>
+					<th>성별</th>
+					<td>${vo.gender}</td>
+				</tr>
+				<tr>
+					<th>생년월일</th>
+					<td>${vo.birth}</td>
+				</tr>
+				<tr>
+					<th>연락처</th>
+					<td>${vo.tel}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<c:if test="${vo.gradeNo == 2}">
+		<div>
+			<table>
+				<tbody>
+					<tr>
+						<th>차종</th>
+						<td>${vo.carModel}</td>
+					</tr>
+					<tr>
+						<th>차량번호</th>
+						<td>${vo.carNo}</td>
+					</tr>
+					<tr>
+						<th>면허번호</th>
+						<td>${vo.licenseNo}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</c:if>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>포인트</th>
+					<td>${vo.myPoint}</td>
+				</tr>
+				<tr>
+					<th>계좌</th>
+					<td>${vo.account}(${vo.bank})</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<table>
+			<tbody>
+				<tr>
+					<th>가입일</th>
+					<td>${vo.regDate}</td>
+				</tr>
+				<tr>
+					<th>가입유형</th>
+					<td>${vo.gradeName}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<a href="update.do?id=${vo.id}">내정보수정</a>
+		<a href="leave.do" id="leaveBtn">탈퇴</a>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>운전자등급으로 전환</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#joinForm").submit(function() {
+		if (!checkData(reg_carModel, $("#carModel"), reg_carModel_error_msg, 1)) return false;
+		if (!checkData(reg_carNo, $("#carNo"), reg_carNo_error_msg, 1)) return false;
+		if (!checkData(reg_licenseNo, $("#licenseNo"), reg_licenseNo_error_msg, 1)) return false;
+	});
+
+	$("#cancelBtn").click(function() {
+		window.close();
+	});
+});
+</script>
+</head>
+
+<body>
+	<div>
+		<h1>운전자등급으로 전환</h1>
+		<form action="joinDriver.do" method="post" id="joinForm">
+			<div>
+				<input name="id" id="id" value="${param.id}" type="hidden">
+			</div>
+			<div>
+				<label for="carModel">차종:</label>
+				<input name="carModel" id="carModel">
+			</div>
+			<div>
+				<label for="carNo">차량번호:</label>
+				<input name="carNo" id="carNo">
+			</div>
+			<div>
+				<label for="licenseNo">면허번호:</label>
+				<input name="licenseNo" id="licenseNo">
+			</div>
+			<div>
+				<button>등급변경</button>
+				<button type="reset">새로입력</button>
+				<button type="button" id="cancelBtn">취소</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

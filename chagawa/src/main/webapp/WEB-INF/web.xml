@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+	id="WebApp_ID" version="4.0">
+	<display-name>chagawa</display-name>
+	<welcome-file-list>
+		<welcome-file>index.do</welcome-file>
+	</welcome-file-list>
+
+	<!-- 서블릿 등록 -->
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>com.chagawa.main.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<!-- 서블릿 매핑 : .do로 -->
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.sub</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!--  권한처리 필터 등록 (실제 처리는 AuthorityFilter 클래스에서) -->
+	<filter>
+		<description>권한 처리 - 로그인 / 관리자</description>
+		<filter-name>authority</filter-name>
+		<filter-class>com.chagawa.common.filter.AuthorityFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>authority</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+
+	<!--  sitemesh 필터 등록 -->
+	<filter>
+		<description>사이트에 레이아웃을 잡는 필터 처리</description>
+		<filter-name>sitemesh</filter-name>
+		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sitemesh</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+</web-app>

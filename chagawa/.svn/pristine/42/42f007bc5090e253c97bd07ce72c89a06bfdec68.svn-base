@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>면허번호 중복확인</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#useBtn").click(function() {
+		$("#licenseNo", parent.opener.document).val($("#licenseNo").val());
+		window.close();
+	});
+	
+	$("#checkBtn").click(function() {
+		if (!checkData(reg_licenseNo, $("#newLicenseNo"), reg_licenseNo_error_msg, 1)) return false;
+		location = "checkLicense.do?licenseNo="+$("#newLicenseNo").val();
+	});
+});
+</script>
+
+</head>
+<body>
+<div>
+	<c:if test="${type==2}">
+		<div>
+			<p>사용가능한 면허번호 입니다.</p>
+			<div>
+				<label for="licenseNo">면허번호:</label>
+				<input name="licenseNo" id="licenseNo" readonly="readonly" value="${param.licenseNo}">
+			</div>
+			<button id="useBtn">사용하기</button>
+		</div>
+	</c:if>
+	
+	<c:if test="${type==1}">
+		<div>
+			<p>이미 사용중인 면허번호입니다.<br>다른 면허번호을 입력해 주세요.</p>
+			<div>
+				<label for="newLicenseNo">아이디:</label>
+				<input name="newLicenseNo" id="newLicenseNo" value="${param.licenseNo}">
+				<button id="checkBtn">중복확인</button>
+			</div>
+		</div>
+	</c:if>
+</div>
+</body>
+</html>

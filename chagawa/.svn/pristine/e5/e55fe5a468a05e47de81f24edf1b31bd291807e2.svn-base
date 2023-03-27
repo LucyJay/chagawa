@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.moveNumber {
+	text-align: center;
+	width: 40px;
+}
+</style>
+<script type="text/javascript">
+	function inputMoveNumber(num) {
+		if (isFinite(num.value) == false) {
+			alert("숫자만 입력할 수 있습니다.");
+			num.value = "";
+			return false;
+		}
+		max = num.getAttribute("maxlength");
+		if (num.value.length >= max) {
+			num.nextElementSibling.focus();
+		}
+	}
+</script>
+</head>
+<body>
+	<div class="container">
+		<h2>포인트 충전</h2>
+		<form method="post" action="charge.do">
+			<input type="hidden" name="id" value="${login.id }"> <input
+				type="hidden" name="memo" value="포인트 충전"> <input
+				type="radio" id="500" name="point" value="500" checked><label
+				for="500">500p</label> <input type="radio" id="1000" name="point"
+				value="1000"><label for="1000">1000p</label> <input
+				type="radio" id="2000" name="point" value="2000"><label
+				for="2000">2000p</label>
+		<div>
+
+			<label>카드 번호&nbsp;</label><input type="text" class="moveNumber"
+				onKeyup="inputMoveNumber(this);" maxlength="4" />&nbsp;-&nbsp; <input
+				type="text" class="moveNumber" onKeyup="inputMoveNumber(this);"
+				maxlength="4" />&nbsp;-&nbsp; <input type="text" class="moveNumber"
+				onKeyup="inputMoveNumber(this);" maxlength="4" />&nbsp;-&nbsp; <input
+				type="text" class="moveNumber" maxlength="4" />
+		</div>
+			<button>충전하기</button>
+		</form>
+	</div>
+</body>
+</html>

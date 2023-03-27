@@ -1,0 +1,71 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>포인트 충전</title>
+
+<style type="text/css">
+.moveNumber {
+	text-align: center;
+	width: 40px;
+}
+</style>
+
+<!-- 카드 번호 검사 -->
+<script type="text/javascript">
+	function inputMoveNumber(num) {
+		if (isFinite(num.value) == false) {
+			alert("숫자만 입력할 수 있습니다.");
+			num.value = "";
+			return false;
+		}
+		max = num.getAttribute("maxlength");
+		if (num.value.length >= max) {
+			num.nextElementSibling.focus();
+		}
+	}
+</script>
+</head>
+
+<!-- 팝업 닫으면서 부모창 새로 고침 -->
+<body onunload="opener.parent.location.reload(); window.close();">
+	<div class="container">
+		<h2>포인트 충전</h2>
+		<form method="post" action="charge.do">
+		
+			<!-- 충전 포인트 선택 -->
+			<input type="hidden" name="id" value="${login.id }">
+			<input type="hidden" name="memo" value="포인트 충전">
+			<input type="radio" id="500" name="point" value="500" checked> <label for="500">500 포인트</label>
+			<input type="radio" id="1000" name="point" value="1000"><label for="1000">1000 포인트</label>
+			<input type="radio" id="2000" name="point" value="2000"><label for="2000">2000 포인트</label>
+			
+			<!-- 카드 선택 -->
+			<div>
+				<label>카드 선택&nbsp;&nbsp;</label><select name="card" id="card"
+					style="height: 2.0em">
+					<option selected disabled hidden="hidden">===선택===</option>
+					<option>국민</option>
+					<option>비씨</option>
+					<option>신한</option>
+					<option>현대</option>
+					<option>삼성</option>
+					<option>롯데</option>
+					<option>우리</option>
+				</select><br>
+				
+				<!-- 카드 번호 입력 -->
+				<label>카드 번호&nbsp;&nbsp;</label>
+				<input type="text" class="moveNumber" onKeyup="inputMoveNumber(this);" maxlength="4" required="required" />&nbsp;-&nbsp;
+				<input type="text" class="moveNumber" onKeyup="inputMoveNumber(this);" maxlength="4" required="required" />&nbsp;-&nbsp;
+				<input type="text" class="moveNumber" onKeyup="inputMoveNumber(this);" maxlength="4" required="required" />&nbsp;-&nbsp;
+				<input type="text" class="moveNumber" maxlength="4" required="required" />
+			</div>
+			<button>충전하기</button>
+		</form>
+	</div>
+</body>
+</html>

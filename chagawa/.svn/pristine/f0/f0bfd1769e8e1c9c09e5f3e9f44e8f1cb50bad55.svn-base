@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#form").submit(function() {
+		if (!checkData(reg_pw, $("#pw"), reg_pw_error_msg, 0)) {
+			$("#pw").val("");
+			return false;
+		}
+		if (!checkData(reg_pw, $("#checkPw"), reg_pw_error_msg, 0)) {
+			$("#checkPw").val("");
+			return false;
+		}
+		if ($("#pw").val() != $("#checkPw").val()) {
+			alert("비밀번호와 비밀번호 확인은 같아야 합니다.");
+			$("#pw, #checkPw").val("");
+			return false;
+		}
+	});
+});
+</script>
+
+</head>
+<body>
+<div>
+	<form action="changePw.do" method="post" id="form">
+		<input name="id" id="id" type="hidden" value="${param.id}">
+		<div>
+			<label for="oldPw">기존 비밀번호</label>
+			<input name="oldPw" id="oldPw" type="password">
+		</div>
+		<div>
+			<label for="pw">새 비밀번호</label>
+			<input name="pw" id="pw" type="password">
+		</div>
+		<div>
+			<label for="checkPw">비밀번호 확인</label>
+			<input name="checkPw" id="checkPw" type="password">
+		</div>
+		<button id="changeBtn">변경하기</button>
+	</form>
+</div>
+</body>
+</html>

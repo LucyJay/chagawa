@@ -1,0 +1,82 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공지 사항 상세 보기</title>
+
+<!-- 라이브러리 등록 - CDN 방식 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$("#deleteBtn").click(function() {
+			if (!confirm("정말 삭제하시겠습니까?"))
+				return false;
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div class="container">
+		<h1>공지 사항 상세 보기</h1>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>번호</th>
+					<td>${vo.no }</td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td>${vo.title }</td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td>${vo.content }</td>
+				</tr>
+				<tr>
+					<th>이미지 파일</th>
+					<td>${vo.imgFile }</td>
+				</tr>
+				<tr>
+					<th>일반 파일</th>
+					<td>${vo.gnrFile }</td>
+				</tr>
+				<tr>
+					<th>시작일</th>
+					<td>${vo.startDate }</td>
+				</tr>
+				<tr>
+					<th>종료일</th>
+					<td>${vo.endDate }</td>
+				</tr>
+				<!--
+				<tr>
+					<th>기간</th>
+					<td>${vo.startDate }&nbsp;~&nbsp;${vo.endDate }</td>
+				</tr>
+				-->
+				<tr>
+					<th>최종 수정일</th>
+					<td>${vo.updateDate }</td>
+				</tr>
+			</tbody>
+		</table>
+		<a
+			href="update.do?no=${vo.no }&page=${param.page}&perPageNum=${param.perPageNum}&key=${param.key }&word=${param.word}"
+			class="btn btn-default">수정</a> <a
+			href="delete.do?no=${vo.no }&perPageNum=${param.perPageNum}"
+			class="btn btn-default" id="deleteBtn">삭제</a> <a
+			href="list.do?page=${param.page }&perPageNum=${param.perPageNum}&key=${param.key }&word=${param.word}"
+			class="btn btn-default">리스트</a>
+	</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+package com.chagawa.messageRoom.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.io.db.DB;
+import com.chagawa.member.vo.LoginVO;
+import com.chagawa.member.vo.MemberVO;
+
+public class MessageRoomDAOImpl implements MessageRoomDAO {
+
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	@Override
+	public List<MessageRoomVO> list() throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println("MessageDAOImpl.list()");
+		// 결과를 전달되는 변수
+		List<MessageRoomVO> list = null;
+		try {
+			con = DB.getConnection();
+			String sql = "select "
+					+ "  m.nickname , "
+					+ "  m.profileImage , "
+					+ "  mr.lmcontent , "
+					+ "  mr.cdate from messageroom mr "
+					+ " join member m on case when mr.par1 = 'passenger' then mr.par2"
+					+ " else mr.par1 end = m.id where mr.par1 = 'passenger'"
+					+ " or mr.par2 = 'passenger' order by mr.cdate desc";
+					
+			
+			System.out.println("MessageRoomDAOImpl.list().sql : " + sql);
+			// 4. 실행객체 & 데이터 세팅
+			pstmt = con.prepareStatement(sql);
+			
+		
+			// 5. 실행 -> rs
+			rs = pstmt.executeQuery();
+			// 6. 데이터 저장 - list
+			// rs가 null 이 아니면 처리하자
+			if(rs != null) {
+				// rs에 다음 데이터가 있으면 처리
+				while(rs.next()) {
+					// list가 null 이면 한번만 생생
+					if(list == null) { list = new ArrayList<>();}
+					// 데이터를 담을 vo 객체를 생성한다.
+					MessageRoomVO MRvo = new MessageRoomVO();
+					
+					MRvo.setNickname(rs.getString("nickname"));
+					MRvo.setProfileImage(rs.getString("profileimage"));
+					MRvo.setLmcontent(rs.getString("lmcontent"));
+					MRvo.setcDate(rs.getString("cdate"));
+					// 데이터가 담긴 vo를 list에 담는다.
+					list.add(MRvo);
+				}// end of while
+			} // end of if
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace(); // 개발자를 위한 코드
+			throw new Exception("대화방 리스트 DB 처리 중 오류 발생");
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt, rs);
+		} // end of try ~ catch ~ finally
+		
+		return list;
+	} // end of list()
+	
+
+} // end of MessageDAOImpl class

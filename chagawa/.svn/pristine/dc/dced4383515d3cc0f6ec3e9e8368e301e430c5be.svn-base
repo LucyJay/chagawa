@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>내정보수정</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/regEx.js"></script>
+
+<script type="text/javascript">
+$(function() {
+	$("#cancelBtn").click(function() {
+		history.back();
+	});
+});
+</script>
+
+</head>
+<body>
+<div>
+	<h3>내 정보 수정</h3>
+	<img src="${vo.profileImage}">
+	<form action="update.do" method="post" id="updateForm">
+		<div>
+			<label for="id">아이디:</label>
+			<input name="id" id="id" value="${vo.id}" readonly="readonly">
+		</div>
+		<div>
+			<label>비밀번호:</label>
+			<a href="changePw.do">비밀번호 변경</a>
+		</div>
+		<div>
+			<label for="nickname">닉네임:</label>
+			<input name="nickname" id="nickname" value="${vo.nickname}">
+		</div>
+		<div>
+			<label for="name">이름:</label>
+			<input name="name" id="name" value="${vo.name}" readonly="readonly">
+		</div>
+		<div>
+			<label for="gender">성별:</label>
+			<input name="gender" id="gender" value="${vo.gender}" readonly="readonly">
+		</div>
+		<div>
+			<label for="birth">생년월일:</label>
+			<input name="birth" id="birth" value="${vo.birth}" readonly="readonly">
+		</div>
+		<div>
+			<label for="tel">연락처:</label>
+			<input name="tel" id="tel" value="${vo.tel}">
+		</div>
+		<div>
+			<label for="bank">은행:</label>
+			<select name="bank" id="bank">
+				<option>농협</option>
+				<option>신한</option>
+				<option>국민</option>
+				<option>우리</option>
+				<option>하나</option>
+				<option>카카오</option>
+				<option>새마을</option>
+				<option>우체국</option>
+			</select>
+		</div>
+		<div>
+			<label for="account">계좌번호:</label>
+			<input name="account" id="account" value="${vo.account}">
+		</div>
+		<div>
+			<label for="gradeName">등급:</label>
+			<input name="gradeName" id="gradeName" value="${vo.gradeName}" readonly="readonly">
+			<c:if test="${vo.gradeNo == 1}">
+				<a href="joinDriver.do">등급전환</a>
+			</c:if>
+		</div>
+		<div>
+			<label for="regDate">가입일:</label>
+			<input name="regDate" id="regDate" value="${vo.regDate}" readonly="readonly">
+		</div>
+		<c:if test="${vo.gradeNo == 2}">
+			<div>
+				<label for="carModel">차종:</label>
+				<input name="carModel" id="carModel" value="${vo.carModel}">
+			</div>
+			<div>
+				<label for="carNo">차량번호:</label>
+				<input name="carNo" id="carNo" value="${vo.carNo}">
+			</div>
+			<div>
+				<label for="licenseNo">면허번호:</label>
+				<input name="licenseNo" id="licenseNo" value="${vo.licenseNo}" readonly="readonly">
+			</div>
+		</c:if>
+		<div>
+			<button>수정</button>
+			<button type="reset">새로입력</button>
+			<button type="button" id="cancelBtn">취소</button>
+		</div>
+	</form>
+</div>
+</body>
+</html>

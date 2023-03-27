@@ -1,0 +1,30 @@
+package com.chagawa.messageRoom.vo;
+
+public class MessageRoomVO {
+private long no;
+private String par1, par2;
+public long getNo() {
+	return no;
+}
+public void setNo(long no) {
+	this.no = no;
+}
+public String getPar1() {
+	return par1;
+}
+public void setPar1(String par1) {
+	this.par1 = par1;
+}
+public String getPar2() {
+	return par2;
+}
+public void setPar2(String par2) {
+	this.par2 = par2;
+}
+@Override
+public String toString() {
+	return "MessageRoomVO [no=" + no + ", par1=" + par1 + ", par2=" + par2 + "]";
+}
+
+	
+}

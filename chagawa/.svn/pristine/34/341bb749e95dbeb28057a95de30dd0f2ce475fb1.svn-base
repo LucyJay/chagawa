@@ -1,0 +1,36 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>이용 중인 카풀</h1>
+	<p>카풀 정보 출력하고</p>
+	<p>동승자면 드라이버 정보 출력</p>
+	<p>동승확정자 정보 출력</p>
+	
+	<p>상태가 출발대기일 경우</p>
+	<p>드라이버일 경우 운행관리 화면</p>
+	<a href="start.do">출발하기</a>
+	<a href="cancel.do">운행취소</a>
+	<p>동승자일 경우 탑승버튼 화면</p>
+	<a href="getin.do">탑승하기</a>
+	
+	<p>상태가 운행중일 경우</p>
+	출발시간 : ~~~
+	<p>드라이버일 경우 운행관리 화면</p>
+	<a href="arrive.do">도착하기</a>
+	
+	<p>상태가 도착일 경우</p>
+	<p>동승자일 경우 도착버튼 화면</p>
+	<a href="finish.do">도착하기</a>
+	
+	
+	<p>드라이버에게 문의하고 싶은 내용이 있나요?</p>
+	<button>메시지 보내기</button>
+
+</body>
+</html>

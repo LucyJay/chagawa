@@ -1,0 +1,50 @@
+package com.chagawa.point.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.chagawa.main.ServiceInterface;
+
+public class PointController {
+
+	private ServiceInterface pointListService;
+	private ServiceInterface pointUpdateService;
+	private ServiceInterface pointWriteService;
+
+	public void pointListService(ServiceInterface pointListService) {
+		this.pointListService = pointListService;
+	}
+
+	public void pointUpdateService(ServiceInterface pointUpdateService) {
+		this.pointUpdateService = pointUpdateService;
+	}
+
+	public void pointWriteService(ServiceInterface pointWriteService) {
+		this.pointWriteService = pointWriteService;
+	}
+
+	public String execute(HttpServletRequest request) throws Exception {
+		System.out.println("PointController.execute().request - " + request);
+		String uri = request.getRequestURI();
+		String method = request.getMethod();
+		System.out.println("PointController.execute().method - " + method);
+		String jsp = null;
+
+		switch (uri) {
+
+		case "/point/list.do":
+			break;
+
+		case "/point/update.do":
+			break;
+
+		case "/point/write.do":
+			break;
+
+		default:
+
+		}
+
+		return jsp;
+	}
+
+}

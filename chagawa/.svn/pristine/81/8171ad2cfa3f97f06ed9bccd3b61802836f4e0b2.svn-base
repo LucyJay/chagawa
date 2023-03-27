@@ -1,0 +1,5 @@
+package com.chagawa.notice.service;
+
+public class NoticeListServiceImpl {
+
+}

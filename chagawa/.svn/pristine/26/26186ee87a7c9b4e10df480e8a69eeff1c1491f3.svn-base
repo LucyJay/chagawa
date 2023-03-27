@@ -1,0 +1,32 @@
+package com.chagawa.carpool.service;
+
+import com.chagawa.carpool.dao.CarpoolDAO;
+import com.chagawa.carpool.vo.CarpoolVO;
+import com.chagawa.carpool.vo.PassengerVO;
+import com.chagawa.main.ServiceInterface;
+
+public class CarpoolCancelServiceImpl implements ServiceInterface {
+
+	private CarpoolDAO dao;
+
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (CarpoolDAO) dao;
+	}
+
+	@Override
+	public Object service(Object obj) throws Exception {
+		Long no = (Long) obj;
+		dao.delUnfixed(no); //미확정 동승자 삭제
+		
+		PassengerVO pvo = new PassengerVO();
+		pvo.setStatus("취소");
+		pvo.setCpNo(no);
+		dao.updatePsgStatus(pvo); //확정 동승자 상태 취소로 변경
+		
+		CarpoolVO vo = new CarpoolVO();
+		vo.setNo(no);
+		vo.setStatus("취소");
+		return dao.updateCpStatus(vo); //카풀 상태 취소로 변경
+	}
+}

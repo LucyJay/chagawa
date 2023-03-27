@@ -1,0 +1,28 @@
+package com.chagawa.member.service;
+
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.dao.MemberDAO;
+
+public class MemberChangePwServiceImpl implements ServiceInterface {
+
+	private MemberDAO dao;
+	
+	@Override
+	public void setDao(Object obj) {
+		this.dao = (MemberDAO) obj;
+	}
+
+	@Override
+	public Object service(Object obj) throws Exception {
+		
+		Object[] objs = (Object[]) obj;
+		String id = (String) objs[0];
+		String pw = (String) objs[1];
+		String newPw = (String) objs[2];
+		
+		
+		
+		return dao.changePw();
+	}
+	
+}

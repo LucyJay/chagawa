@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>카풀 등록</title>
+</head>
+<body>
+	<p>카풀 도착확인 중...</p>
+	번호 : ${vo.no } | ${vo.startRegion } / ${vo.startAddress } ->
+	${vo.arriveRegion } / ${vo.arriveAddress }
+	<br>예정운행시간 : ${vo.startTimePre } 출발 / ${vo.arriveTimePre } 도착
+	<br>실제운행시간 : ${vo.startTime } 출발 / ${vo.arriveTime } 도착
+	<br>동승료 ${vo.price } 포인트
+	<c:if test="${pstatus ne null}">
+		<p>
+			드라이버 정보<br> 닉네임: ${vo.nickname } <button>메시지 보내기</button>
+		</p>
+	</c:if>
+	<p>동승자 도착확인정보 출력</p>
+	<p>
+		동승자 정보 - ${vo.psgArrCount} / ${vo.psgGotCount } <br>
+		<c:forEach items="${list }" var="pvo">
+		닉네임: ${pvo.nickname } |
+		<c:if test="${pvo.status eq '확정' }">
+				<c:if test="${pvo.id eq login.id }">
+					<a href="getin.do?cpNo=${vo.no }" >탑승하기</a>
+				</c:if>
+				<c:if test="${pvo.id ne login.id }"> -탑승대기- </c:if>
+			</c:if>
+			<c:if test="${pvo.status eq '탑승' }"> -탑승완료- </c:if>
+			<br>
+		</c:forEach>
+	</p>
+도착확인 정보 및 별점 남기기
+출발시간 : ${vo.startTime }
+	도착시간 : ${vo.arriveTime }
+
+</body>
+</html>

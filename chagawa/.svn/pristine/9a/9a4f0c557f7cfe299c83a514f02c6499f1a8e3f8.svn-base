@@ -1,0 +1,5 @@
+package com.chagawa.epilogue.dao;
+
+public class EpilogueDAOImpl {
+
+}

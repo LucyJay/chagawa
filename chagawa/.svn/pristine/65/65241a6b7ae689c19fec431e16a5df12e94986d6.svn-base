@@ -1,0 +1,14 @@
+package com.chagawa.point.dao;
+
+import java.util.List;
+
+import com.chagawa.point.vo.PointVO;
+
+public interface PointDAO {
+
+	public List<PointVO> list(String id) throws Exception;
+
+	public int update(PointVO vo) throws Exception;
+
+	public int write(PointVO vo) throws Exception;
+}

@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>카풀 상세보기</h1>
+	<p>카풀 정보 출력하고</p>
+	<p>동승신청자, 동승확정자 정보 출력</p>
+	<form method="post">
+		<p>동승 신청 폼</p>
+		보유: ~~ 포인트<br> <input name="msg"
+			placeholder="신청 메시지를 입력하세요(ex. 같이 타요~)">
+		<button>동승신청</button>
+	</form>
+	<p>드라이버에게 문의하고 싶은 내용이 있나요?</p>
+	<button>메시지 보내기</button>
+
+</body>
+</html>

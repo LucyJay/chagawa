@@ -1,0 +1,5 @@
+package com.chagawa.epilogue.service;
+
+public class EpilogueWriteServiceImpl {
+
+}

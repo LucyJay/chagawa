@@ -1,0 +1,82 @@
+package com.chagawa.messageRoom.controller;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import com.chagawa.message.vo.MessageVO;
+import com.chagawa.messageRoom.vo.MessageRoomVO;
+import com.chagawa.main.Execute;
+import com.chagawa.main.ServiceInterface;
+import com.chagawa.member.vo.LoginVO;
+
+public class MessageRoomController {
+
+	// private 변수로 MessageService
+	private ServiceInterface messageRoomListService;
+	private ServiceInterface messageRoomWriteService;
+	private ServiceInterface messageRoomDeleteService;
+	private ServiceInterface messageRoomLeaveService;
+	// setter를 만들어서 생성된 service를 받는다.
+	public void setMessageRoomListService(ServiceInterface messageRoomListService) {
+		this.messageRoomListService = messageRoomListService;
+	}
+	public void setMessageRoomWriteService(ServiceInterface messageRoomWriteService) {
+		this.messageRoomWriteService = messageRoomWriteService;
+	}
+	public void setMessageRoomDeleteService(ServiceInterface messageRoomDeleteService) {
+		this.messageRoomDeleteService = messageRoomDeleteService;
+	}
+	public void setMessageRoomLeaveService(ServiceInterface messageRoomLeaveService) {
+		this.messageRoomLeaveService = messageRoomLeaveService;
+	}
+	
+	// 실행 메서드 -> 리턴 String 데이터를 jsp 또는 url 정보가 된다.
+	public String execute(HttpServletRequest request) throws Exception{
+		System.out.println("MessageRoomController.execute().request : " + request);
+		// 어떤 요청
+		String uri = request.getRequestURI();
+		String jsp = null;
+		HttpSession session = request.getSession();
+		// 처리 
+		switch (uri) {
+		case "/messageroom/list.do":
+		
+			request.setAttribute("list", Execute.run(messageRoomListService, null));
+			jsp = "/messageroom/list.do";
+			break;
+		
+		
+			
+		case "/messageroom/write.do":
+			if(request.getMethod().equals("GET")) {
+				jsp = "messageroom/write";
+			} else {
+				MessageRoomVO writeVO = new MessageRoomVO();
+//				writeVO.setTitle(request.getParameter("title"));
+				writeVO.setPar1(request.getParameter("par1"));
+				writeVO.setPar2(request.getParameter("par2"));
+				// 글등록 처리해 보자.
+				Execute.run(messageRoomWriteService, writeVO);
+				jsp = "redirect:list.do";
+			}
+			break;
+			
+			
+		case "/messageroom/leave.do":
+			String leaveVO = request.getParameter("par1");
+			if(request.getMethod().equals("GET")) {
+				jsp = "messageroom/leave";
+			}else {
+			Execute.run(messageRoomLeaveService, leaveVO);
+			jsp = "redirect:messageRoom/list"; 
+			}
+			break;
+			
+		default:
+			jsp = "redirect:/error/404.do";
+			request.getSession().setAttribute("uri", uri);		}
+		return jsp;
+	}
+	
+}

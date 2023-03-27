@@ -1,0 +1,92 @@
+package com.chagawa.point.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.chagawa.io.db.DB;
+import com.chagawa.point.vo.PointVO;
+import com.webjjang.util.PageObject;
+
+public class PointDAOImpl implements PointDAO {
+
+	private Connection con = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+
+	// 포인트 내역
+	@Override
+	public List<PointVO> list(PageObject pageObject) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getTotalRow(PageObject pageObject) throws Exception {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	// 포인트 증감
+	@Override
+	public int update(PointVO vo) throws Exception {
+		// TODO Auto-generated method stub
+
+		int result = 0;
+
+		try {
+
+			con = DB.getConnection();
+
+			String sql = "update member set myPoint = myPoint + ?  where id = ?";
+
+			pstmt = con.prepareStatement(sql);
+			pstmt.setLong(1, vo.getPrice());
+			pstmt.setString(2, vo.getId());
+
+			result = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		} finally {
+			DB.close(con, pstmt);
+
+		}
+		return result;
+	}
+
+	// 포인트 내역 작성
+	@Override
+	public int write(PointVO vo) throws Exception {
+		// TODO Auto-generated method stub
+
+		int result = 0;
+
+		try {
+
+			con = DB.getConnection();
+
+			String sql = "insert into point(no, runDate, memo, price) values(point_seq.nextval, ?, ?, ?)";
+
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, vo.getRunDate());
+			pstmt.setString(2, vo.getMemo());
+			pstmt.setLong(3, vo.getPrice());
+
+			result = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			DB.close(con, pstmt);
+		}
+
+		return result;
+	}
+
+}

@@ -1,0 +1,65 @@
+package com.chagawa.carpool.dao;
+
+import java.util.List;
+
+import com.chagawa.carpool.vo.CarpoolVO;
+import com.chagawa.carpool.vo.PassengerVO;
+import com.webjjang.util.PageObject;
+
+public interface CarpoolDAO {
+	
+	// -------------- 페이지 데이터 관련 -----------------
+	
+	//totalRow 구하는 메서드
+	public long getTotalRow(String condition, String str1, String str2) throws Exception;
+	
+	//카풀 리스트 보기 - 매개변수로 출발지역, 도착지역 받음 
+	public List<CarpoolVO> list(CarpoolVO vo, PageObject pageObject) throws Exception;
+
+	//내 이용내역 - 운행내역(드라이버)
+	public List<CarpoolVO> myDriveList(String id, PageObject pageObject) throws Exception;
+	public List<PassengerVO> psgPerDriveList(Long cpNo) throws Exception; //위에서 cpNo 받아서 처리
+	
+	//내 이용내역 - 동승내역(동승자)
+	public List<CarpoolVO> myPsgList(String id, PageObject pageObject) throws Exception;
+	
+	//현재 이용중인 카풀 번호(여부) 확인
+	public CarpoolVO nowDriving(String id) throws Exception;
+	public CarpoolVO nowPsging(String id) throws Exception;
+	
+	//동승자의 현재 상태 확인
+	public String psgStatus(String id) throws Exception;
+	
+	//리스트에서 상세보기 들어간 화면
+	public CarpoolVO view(Long no) throws Exception;
+	public List<PassengerVO> psgList(Long cpNo) throws Exception; //위에서 번호 받아서 처리
+	// + 동승자인 경우 현재 포인트 받아오기
+	
+	
+	// ----------- 카풀 운영 ---------------
+	
+	//카풀 등록 (드라이버)
+	public Integer write(CarpoolVO vo) throws Exception;
+	
+	//동승신청 (동승자)
+	public Integer apply(PassengerVO vo) throws Exception;
+	
+	//카풀 상태변경 : 출발대기/취소/운행중/도착/종료 전환 (운행중, 도착은 동적쿼리로 운영)
+	public Integer updateCpStatus(CarpoolVO vo) throws Exception;
+	
+	//미확정 동승자 삭제 : 출발대기로 전환 시, 취소 시 사용
+	public Integer delUnfixed(Long cpNo) throws Exception;
+	
+	//동승자 상태 변경 : 확정/취소/탑승/미탑승/도착/종료 전환 (확정, 탑승확인, 도착, 종료는 동적쿼리)
+	public Integer updatePsgStatus(PassengerVO vo) throws Exception;
+	
+	//운행종료 전환 여부 확인용 - 0이면 운행종료로 전환시킬 것
+	public Integer uncheckedPsg(Long cpNo) throws Exception;
+	
+	//후기 작성 시 사용 : 후기를 등록하지 않은 카풀번호 찾기 , 후기 작성 시 작성여부 update
+	public List<Long> unreviewedCpNo(String id) throws Exception;
+	public Integer review(CarpoolVO vo) throws Exception;
+
+	
+	
+}
