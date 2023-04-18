@@ -38,4 +38,4 @@
 ## 주요 개발 기능
 상세한 내용은 Wiki 탭을 참조해 주세요.
 
-카풀 서비스 흐름: <https://github.com/LucyJay/chagawa/wiki/%EC%B9%B4%ED%92%80-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B0%9C%EC%9A%94>
+카풀 서비스 흐름: <https://github.com/LucyJay/chagawa/wiki/카풀-서비스-개요>
