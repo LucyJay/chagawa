@@ -39,6 +39,11 @@
 
 ***
 ## 📚 주요 개발 기능
-상세한 내용은 Wiki 탭을 참조해 주세요.
+
+Wiki 탭을 참조해 주세요.
 
 카풀 서비스 흐름: <https://github.com/LucyJay/chagawa/wiki/1.-카풀-서비스-흐름>
+
+카풀 서비스 운영 코드 및 화면 함께 보기: <https://github.com/LucyJay/chagawa/wiki/5.-카풀-운영>
+
+카풀 등록: <https://github.com/LucyJay/chagawa/wiki/3.-카풀-등록>
