@@ -95,17 +95,17 @@
 							<b>${vo.startAddress } ▶ ${vo.arriveAddress }</b>
 						</h4>
 						${vo.startTimePre } 출발 예정 | ${vo.arriveTimePre } 도착 예정<br>
-						드라이버 <b>${vo.nickname }</b> | ${vo.driveCount }회 운행 | 평균별점
-						${vo.starAvg } [${vo.starCount }회 참여]<br> 동승료 <b>${vo.price }</b>
-						포인트
+						드라이버 <b>${vo.nickname }</b> | ${vo.driveCount }회 운행 | 평균별점 ${vo.starAvg } [${vo.starCount }회 참여]<br>
+						동승료 <b>${vo.price }</b> 포인트
 					</div>
 				</div>
 			</c:forEach>
+			<!-- 페이지 버튼 -->
 			<div class="col-md-9 page" align="center">
 				<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
 			</div>
 		</c:if>
-<!-- 검색 결과가 없는 경우 -->
+		<!-- 검색 결과가 없는 경우 -->
 		<c:if test="${list == null && startRegion != null }">
 			<div>
 				<b>현재 해당 지역에 운행중인 카풀이 없습니다.</b>

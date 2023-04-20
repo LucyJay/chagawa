@@ -18,9 +18,7 @@ public class CarpoolListServiceImpl implements ServiceInterface {
 	public Object service(Object obj) throws Exception {
 		Object[] objs = (Object[]) obj;
 		CarpoolVO vo = (CarpoolVO) objs[0];
-		System.out.println(vo);
 		PageObject pageObject = (PageObject) objs[1];
-		System.out.println(dao);
 		pageObject.setTotalRow(dao.getTotalRow("list", vo.getStartRegion(), vo.getArriveRegion()));
 		return dao.list(vo, pageObject);
 	}

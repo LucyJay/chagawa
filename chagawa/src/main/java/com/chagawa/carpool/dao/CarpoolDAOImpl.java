@@ -99,11 +99,11 @@ public class CarpoolDAOImpl extends DAO implements CarpoolDAO {
 		List<CarpoolVO> list = null;
 		System.out.println("CarpoolDAOImpl.myList()");
 		String condition = null;
-		int index = 0;
-		if (isDriver.equals("driver"))
+		int index = 0; // 동적 쿼리 실행을 위한 인덱스 변수
+		if (isDriver.equals("driver")) //운행내역 출력용 조건
 			condition = " WHERE c.driverId = ? ";
 		else
-			condition = ", passenger p WHERE p.psgId = ? AND c.no = p.cpNo ";
+			condition = ", passenger p WHERE p.psgId = ? AND c.no = p.cpNo "; //동승내역 출력용 조건
 		try {
 			con = getConnection();
 			String cols = " no, nickname, startRegion, startAddress, arriveRegion, arriveAddress, startTime, arriveTime, price, status, seats, carModel, carNo, reviewed, star, pfixCount, pgotCount ";
@@ -111,24 +111,22 @@ public class CarpoolDAOImpl extends DAO implements CarpoolDAO {
 			sql += " SELECT rownum rnum, " + cols + " FROM ( ";
 			sql += " SELECT c.no, m.nickname, c.startRegion, c.startAddress, c.arriveRegion, c.arriveAddress, c.startTime, c.arriveTime, c.price, ";
 			if (isDriver.equals("driver"))
-				sql += " c.reviewed, ";
+				sql += " c.reviewed, "; //리뷰 작성 여부(드라이버용)
 			sql += " c.status, c.seats, d.carModel, d.carNo, c.star, "
 					+ " (SELECT count(*) FROM passenger WHERE fixed = 1 AND cpNo = c.no) pfixCount, " // 동승확정자 수;
 					+ " (SELECT count(*) FROM passenger WHERE gotin = 1 AND cpNo = c.no) pgotCount "; // 탑승자 수;
-			if (!isDriver.equals("driver"))
-				sql += ", (SELECT reviewed FROM passenger WHERE cpNo=c.no AND psgId = ?) reviewed "; // 내 리뷰여부
+			if (!isDriver.equals("driver")) //동승내역일 때
+				sql += ", (SELECT reviewed FROM passenger WHERE cpNo=c.no AND psgId = ?) reviewed "; // 리뷰 작성 여부(동승자용)
 			sql += " FROM carpool c, member m, driver d " + condition
 					+ " AND m.id = d.id AND c.driverId = m.id AND (c.status = '종료' OR c.status = '도착' OR c.status = '취소') ORDER BY c.no desc ";
 			sql += ")) WHERE rnum BETWEEN ? AND ?";
-			System.out.println(sql);
 
 			pstmt = con.prepareStatement(sql);
 			if (!isDriver.equals("driver"))
-				pstmt.setString(++index, id);
+				pstmt.setString(++index, id); //물음표 개수가 가변적이므로 index 사용
 			pstmt.setString(++index, id);
 			pstmt.setLong(++index, pageObject.getStartRow());
 			pstmt.setLong(++index, pageObject.getEndRow());
-			System.out.println(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				if (list == null)
@@ -548,7 +546,7 @@ public class CarpoolDAOImpl extends DAO implements CarpoolDAO {
 		System.out.println("CarpoolDAOImpl.review()");
 		Integer result = 0;
 		String col = vo.getMemo(); // "reviewed" 또는 "star" 넣어서 보낼 것
-		int reviewed = vo.getReviewed();
+		int reviewed = vo.getReviewed(); // 세팅할 값: 1 또는 0
 		try {
 			con = getConnection();
 			// 드라이버인 경우 result + 1
@@ -558,22 +556,12 @@ public class CarpoolDAOImpl extends DAO implements CarpoolDAO {
 			pstmt.setString(2, vo.getId());
 			result += pstmt.executeUpdate();
 
-			System.out.println(sql);
-			System.out.println(col);
-			System.out.println(reviewed);
-			System.out.println(vo);
-
 			// 동승자인 경우 result + 1
 			sql = " UPDATE passenger SET " + col + " = " + reviewed + " WHERE cpNo = ? AND psgId = ? ";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setLong(1, vo.getNo());
 			pstmt.setString(2, vo.getId());
 			result += pstmt.executeUpdate();
-
-			System.out.println(sql);
-			System.out.println(col);
-			System.out.println(reviewed);
-			System.out.println(vo);
 
 			return result; // 1이 반환되어야 정상
 		} catch (Exception e) {

@@ -20,9 +20,9 @@ public class CarpoolCancelServiceImpl implements ServiceInterface {
 	public Object service(Object obj) throws Exception {
 		
 		Long no = (Long) obj;
-		List<PassengerVO> idList = dao.psgList(no);
+		List<PassengerVO> idList = dao.psgList(no); // 취소 메시지 발송용 명단
 		
-		dao.delUnfixed(no); //미확정 동승자 삭제
+		dao.delUnfixed(no); //미확정 동승자 데이터 삭제
 		
 		PassengerVO pvo = new PassengerVO();
 		pvo.setStatus("취소");

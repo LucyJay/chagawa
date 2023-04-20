@@ -20,26 +20,21 @@
 
 		var container = document.getElementById('map'); // 지도를 표시할 div 
 		
-		//시작, 도착지점의 좌표
+		//시작, 도착지점의 좌표 : vo에서 받아옴
 		var startLatlng = new kakao.maps.LatLng(${vo.startLat}, ${vo.startLng});
 		var arriveLatlng = new kakao.maps.LatLng(${vo.arriveLat}, ${vo.arriveLng});
-	    
 
 		var options = {
 			center : startLatlng, // 지도의 중심좌표
-			level : 3
-		// 지도의 확대 레벨
+			level : 3 // 지도의 확대 레벨
 		};
 
-		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		// 지도 생성
 		var map = new kakao.maps.Map(container, options);
 
-		// 마커 이미지의 이미지 주소입니다
+		// 마커 이미지 정보
 		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-		// 마커 이미지의 이미지 크기 입니다
 		var imageSize = new kakao.maps.Size(24, 35);
-		// 마커 이미지를 생성합니다    
 		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
 		//마커 생성
@@ -56,18 +51,18 @@
 			image : markerImage
 		});
 		
-		// 지도를 재설정할 범위정보를 가지고 있을 LatLngBounds 객체를 생성합니다
+		// 지도의 범위정보 설정
 		var bounds = new kakao.maps.LatLngBounds();    
 		bounds.extend(startLatlng);
 		bounds.extend(arriveLatlng);
 		map.setBounds(bounds);
 		
-		 //동승신청 시 이용중인 카풀이 있으면 exist를 가지고 돌아와 알림 뜸
+		 // 동승신청 시 이용중인 카풀이 있으면 exist를 가지고 돌아와 알림 뜸
 		if ("${param.exist }") {
 			alert("이미 이용 중인 카풀이 존재합니다.");
 		}
 		
-		 //포인트 부족 시 동승신청 불가
+		 // 포인트 부족 시 동승신청 불가
 		$("#applyBtn").click(function() {
 			if (parseInt("${vo.price}") > parseInt("${point}")) {
 				alert("보유 포인트가 부족합니다. 마이페이지에서 포인트를 충전해 주세요.");
@@ -207,8 +202,9 @@
 		<div class="psg">
 			<!-- 현재 상태에 따라 다르게 출력되는 부분 -->
 			<div class="apply">
+				<!-- 로그인한 경우 -->
 				<c:if test="${login ne null }">
-					<!-- 로그인했고 관리자가 아니며 아직 이 차에 동승신청하지 않은 경우 동승신청 폼 -->
+					<!-- 관리자가 아니며 아직 이 차에 동승신청하지 않은 경우: 동승신청 폼 -->
 					<c:if test="${isPsg != 1 }">
 						<c:if test="${login.gradeNo != 9 }">
 							<form id="apply" action="apply.do" method="post">
@@ -222,7 +218,7 @@
 							</form>
 						</c:if>
 					</c:if>
-					<!-- 이미 이 차에 동승을 신청한 경우 취소 버튼 -->
+					<!-- 이미 이 차에 동승을 신청한 경우: 취소 버튼 -->
 					<c:if test="${isPsg == 1 }">
 						<div class="title">이 차에 동승을 신청했어요</div>
 							아래 명단에서 확정여부를 확인하세요.

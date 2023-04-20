@@ -67,8 +67,7 @@
 		<!-- 운행내역/동승내역 선택 및 조회 버튼 -->
 		<div class="form">
 			<form>
-				<select id="isDriver" class="form-control"
-					style="width: 150px; float: left; margin-right: 20px;"
+				<select id="isDriver" class="form-control" style="width: 150px; float: left; margin-right: 20px;"
 					name="isDriver" required="required">
 					<option value="driver">운행</option>
 					<option value="psg">동승</option>

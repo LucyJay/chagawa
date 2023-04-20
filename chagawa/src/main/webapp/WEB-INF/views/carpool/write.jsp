@@ -21,22 +21,18 @@
 		var options = {
 			center : new kakao.maps.LatLng(37.73931073401507,
 					127.04486202736867), // 지도의 중심좌표
-			level : 3
-		// 지도의 확대 레벨
+			level : 3 // 지도의 확대 레벨
 		};
 
-		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		// 지도를 표시할 div와 지도 옵션으로 지도 생성
 		var map = new kakao.maps.Map(container, options);
 
-		// 마커 이미지의 이미지 주소입니다
+		// 마커 이미지 정보
 		var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-		// 마커 이미지의 이미지 크기 입니다
 		var imageSize = new kakao.maps.Size(24, 35);
-		// 마커 이미지를 생성합니다    
 		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-		// 마커를 생성합니다
+		
+		// 출발 마커 생성
 		var startMarker = new kakao.maps.Marker({
 			map : map,
 			position : new kakao.maps.LatLng(37.73931073401507,
@@ -46,7 +42,7 @@
 		});
 		startMarker.setDraggable(true);
 
-		// 마커를 생성합니다
+		// 도착 마커 생성
 		var arriveMarker = new kakao.maps.Marker({
 			map : map,
 			position : new kakao.maps.LatLng(37.7393, 127.045),
@@ -116,16 +112,15 @@
 			<b>카풀 등록하기</b>
 		</h1>
 		<form method="post">
-			<input type="hidden" name="id" value="${login.id }"> <input
-				type="hidden" id="startLat" name="startLat"> <input
-				type="hidden" id="startLng" name="startLng"> <input
-				type="hidden" id="arriveLat" name="arriveLat"> <input
-				type="hidden" id="arriveLng" name="arriveLng">
+			<input type="hidden" name="id" value="${login.id }">
+			<input type="hidden" id="startLat" name="startLat">
+			<input type="hidden" id="startLng" name="startLng">
+			<input type="hidden" id="arriveLat" name="arriveLat">
+			<input type="hidden" id="arriveLng" name="arriveLng">
 
 			<div class="leftForm">
 				<!-- 지도가 들어갈 공간 -->
 				<div id="map" style="width: 100%; height: 250px;"></div>
-
 				<div>
 					<div>
 						<label for="startRegion">출발</label>
@@ -159,22 +154,22 @@
 					</div>
 				</div>
 				<div class="timeForm">
-					<label for="startTimePre">출발예정시각</label> <input
-						class="form-control" name="startTimePre" type="datetime-local">
+					<label for="startTimePre">출발예정시각</label>
+					<input class="form-control" name="startTimePre" type="datetime-local">
 				</div>
 				<div class="timeForm">
-					<label for="arriveTimePre">도착예정시각</label> <input
-						class="form-control" name="arriveTimePre" type="datetime-local">
+					<label for="arriveTimePre">도착예정시각</label>
+					<input class="form-control" name="arriveTimePre" type="datetime-local">
 				</div>
 			</div>
 			<div class="rightForm">
 				<div class="etcForm">
-					<label for="price">동승료</label> <input class="form-control"
-						name="price" type="number">
+					<label for="price">동승료</label>
+					<input class="form-control" name="price" type="number">
 				</div>
 				<div class="etcForm">
-					<label for="seats">최대동승인원</label> <input class="form-control"
-						name="seats" type="number">
+					<label for="seats">최대동승인원</label>
+					<input class="form-control" name="seats" type="number">
 				</div>
 				<div class="etcForm">
 					<label for="memo">드라이버 메시지</label>
@@ -182,8 +177,7 @@
 						placeholder="드라이버 메시지를 입력해 주세요(예시: 음악 들으면서 같이 가실 분~)"></textarea>
 				</div>
 
-				<button id="submit" class="btn btn-primary pull-right">카풀
-					등록하기</button>
+				<button id="submit" class="btn btn-primary pull-right">카풀 등록하기</button>
 				<button class="btn btn-default pull-right"
 					style="margin-right: 5px;" type="button" id="backBtn">이전으로</button>
 			</div>

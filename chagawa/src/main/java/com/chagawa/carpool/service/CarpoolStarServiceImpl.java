@@ -14,14 +14,14 @@ public class CarpoolStarServiceImpl implements ServiceInterface {
 		this.dao = (CarpoolDAO) obj;
 	}
 
-	@Override
-	public Object service(Object obj) throws Exception {
-		StarPointVO svo = (StarPointVO) obj;
-		CarpoolVO vo = new CarpoolVO();
-		vo.setNo(svo.getCpNo());
-		vo.setId(svo.getStarter());
-		vo.setMemo("star");
-		vo.setReviewed(1);
-		return dao.review(vo);
-	}
+		@Override
+		public Object service(Object obj) throws Exception {
+			StarPointVO svo = (StarPointVO) obj;
+			CarpoolVO vo = new CarpoolVO();
+			vo.setNo(svo.getCpNo());
+			vo.setId(svo.getStarter());
+			vo.setMemo("star");
+			vo.setReviewed(1);
+			return dao.review(vo);
+		}
 }

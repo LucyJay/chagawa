@@ -24,6 +24,7 @@ public class CarpoolMyListServiceImpl implements ServiceInterface {
 		String isDriver = (String) objs[2];
 		pageObject.setTotalRow(dao.getTotalRow(isDriver, id, null));
 		List<CarpoolVO> list = dao.myList(id, isDriver, pageObject);
+		//리스트 조회 후 각 카풀별 동승자 리스트도 가져와 세팅
 		if (list != null) {
 			for (CarpoolVO vo : list) {
 				vo.setPsgList(dao.psgPerDriveList(vo.getNo()));

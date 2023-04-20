@@ -209,7 +209,7 @@ var container = document.getElementById('map'); // 지도를 표시할 div
 				<hr>
 			</div>
 			<div class="driving">
-				<!-- 운행중일 경우 출발시간, 도착일 경우 출발/도착시간 표기 -->
+				<!-- 좌측 하단: 운행중일 경우 출발시간, 도착일 경우 출발/도착시간 표기 -->
 				<c:if test="${vo.status eq '도착' || vo.status eq '운행중'}">
 					<div class="time">
 						출발시간 : ${vo.startTime }
@@ -218,7 +218,7 @@ var container = document.getElementById('map'); // 지도를 표시할 div
 						</c:if>
 					</div>
 				</c:if>
-				<!-- 드라이버일 경우 나오는 상태별 버튼들 -->
+				<!-- 좌측 하단: 드라이버일 경우 나오는 상태별 버튼들 -->
 				<c:if test="${pstatus eq null}">
 					<!-- 출발대기인 경우 출발/운행취소 버튼 -->
 					<c:if test="${vo.status eq '출발대기' }">

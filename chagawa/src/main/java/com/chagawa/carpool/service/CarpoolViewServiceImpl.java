@@ -16,6 +16,7 @@ public class CarpoolViewServiceImpl implements ServiceInterface {
 	@Override
 	public Object service(Object obj) throws Exception {
 		CarpoolVO vo = dao.view((Long) obj);
+		// 해당 번호의 카풀이 존재할 경우 동승자 명단도 세팅
 		if (vo != null) {
 			vo.setPsgList(dao.psgList(vo.getNo()));
 		}
