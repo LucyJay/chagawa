@@ -559,7 +559,7 @@ public class CarpoolController {
 				// 운행취소 서비스 실행-> 취소된 탑승자 리스트 반환
 				List<PassengerVO> cancelList = (List<PassengerVO>) Execute.run(carpoolCancelService, cancelNo);
 
-				// 탑승자 리스트 각각에 대해
+				// 탑승자 리스트 각각에 대해 
 				if (cancelList != null) {
 					for (PassengerVO cancelVO : cancelList) {
 						String cancelPid = cancelVO.getId();
