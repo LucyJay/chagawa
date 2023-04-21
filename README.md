@@ -33,7 +33,8 @@
 1. SQL Developer에서 계정 생성 후 '차가와 스키마 종합.sql' 파일을 그대로 실행하여 필요한 테이블을 생성한다.
 2. Tomcat Server의 Modules에서 포트번호는 80, Path는 "/"로 수정한다.
 3. com.chagawa.io.db 패키지의 DB, DAO 클래스 각각의 URI, ID, PW를 DB와 일치하도록 수정한다.
-4. 서버가 정상적으로 구동되는 것을 확인한 후 브라우저에서 접속한다.
+4. src/main/webapp/WEB-INF/views/carpool 폴더의 driverView.jsp, view.jsp, now.jsp, write.jsp 16행에 Kakao 지도 API의 appkey를 넣는다.
+5. 서버가 정상적으로 구동되는 것을 확인한 후 브라우저에서 접속한다.
 * 아이디 admin, 비밀번호 1111로 로그인 후 회원 리스트에서 다른 샘플 회원들의 아이디와 등급을 확인하실 수 있습니다.(비밀번호는 모두 1111로 설정되어 있습니다.)
 
 
